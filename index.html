@@ -1,275 +1,590 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NexusEXPO — Enterprise Event & Marketing Operations Hub</title>
-  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusEXPO — Enterprise Marketing EventOps & Intake Hub</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
+  
+  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-            body: ['Inter', 'sans-serif'],
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'SF Mono', 'Menlo', 'monospace']
           },
           colors: {
-            brand: {
-              50: '#f0f9ff',
-              500: '#0284c7',
-              600: '#0369a1',
-              accent: '#6366f1'
+            canvas: 'var(--color-canvas)',
+            'surface-1': 'var(--color-surface-1)',
+            'surface-2': 'var(--color-surface-2)',
+            'surface-3': 'var(--color-surface-3)',
+            'surface-4': 'var(--color-surface-4)',
+            hairline: 'var(--color-hairline)',
+            'hairline-strong': 'var(--color-hairline-strong)',
+            ink: 'var(--color-ink)',
+            'ink-muted': 'var(--color-ink-muted)',
+            'ink-subtle': 'var(--color-ink-subtle)',
+            'ink-tertiary': 'var(--color-ink-tertiary)',
+            primary: {
+              DEFAULT: 'var(--color-primary)',
+              hover: 'var(--color-primary-hover)',
+              focus: 'var(--color-primary-focus)',
+            },
+            semantic: {
+              success: 'var(--color-semantic-success)',
+              warning: 'var(--color-semantic-warning)',
+              danger: 'var(--color-semantic-danger)',
             }
-          },
-          boxShadow: {
-            'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.4)',
-            'glow-purple': '0 0 25px -5px rgba(168, 85, 247, 0.4)',
-            'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.4)',
-            'glow-amber': '0 0 25px -5px rgba(245, 158, 11, 0.4)',
-            'card-hover': '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px 0 rgba(255, 255, 255, 0.05)'
           }
         }
       }
     }
   </script>
+
   <style>
-    /* Custom scrollbars */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #090d16;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #334155;
-    }
-
-    .glass-panel {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .glass-badge {
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .card-gradient-overlay {
-      background: linear-gradient(
-        180deg,
-        rgba(15, 23, 42, 0.2) 0%,
-        rgba(15, 23, 42, 0.45) 35%,
-        rgba(10, 15, 29, 0.88) 70%,
-        rgba(7, 10, 20, 0.98) 100%
-      );
-    }
-
-    .card-top-vignette {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, transparent 60%);
+    /* ==========================================================================
+       LINEAR DESIGN SYSTEM THEME TOKENS (from design-linear.md)
+       Supports both Dark Canvas (#010102) and In-Product Light Canvas (#f8f9fa)
+       ========================================================================== */
+    :root, html.dark {
+      --color-canvas: #010102;
+      --color-surface-1: #0c0d10;
+      --color-surface-2: #15171c;
+      --color-surface-3: #1e2027;
+      --color-surface-4: #282b35;
+      --color-hairline: #23252a;
+      --color-hairline-strong: #363a45;
+      --color-hairline-tertiary: #191b20;
+      --color-ink: #f7f8f8;
+      --color-ink-muted: #d0d6e0;
+      --color-ink-subtle: #8a8f98;
+      --color-ink-tertiary: #62666d;
+      --color-primary: #5e6ad2;
+      --color-primary-hover: #828fff;
+      --color-primary-focus: #5e69d1;
+      --color-brand-secure: #7a7fad;
+      --color-semantic-success: #00e599;
+      --color-semantic-warning: #f59e0b;
+      --color-semantic-danger: #f43f5e;
+      
+      --color-top-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.7);
+      --color-tick-active: #00e599;
+      --color-tick-inactive: #1c1d22;
+      --color-tick-pending: #f59e0b;
+      --color-rail-bg: #07080a;
+      --color-header-bg: rgba(1, 1, 2, 0.88);
+      --color-modal-scrim: rgba(0, 0, 0, 0.82);
+      --color-badge-bg: #15171c;
+      --color-badge-text: #d0d6e0;
+      --color-table-stripe: rgba(255, 255, 255, 0.015);
+      --color-input-bg: #121317;
     }
 
-    .badge-shimmer {
-      position: relative;
-      overflow: hidden;
-    }
-    .badge-shimmer::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(60deg, transparent, rgba(255,255,255,0.12), transparent);
-      transform: rotate(25deg);
-      animation: shimmer 4s infinite;
-    }
-    @keyframes shimmer {
-      0% { transform: translateX(-100%) rotate(25deg); }
-      100% { transform: translateX(100%) rotate(25deg); }
+    html.light {
+      --color-canvas: #f8f9fa;
+      --color-surface-1: #ffffff;
+      --color-surface-2: #f1f3f5;
+      --color-surface-3: #e9ecef;
+      --color-surface-4: #dee2e6;
+      --color-hairline: #e2e8f0;
+      --color-hairline-strong: #cbd5e1;
+      --color-hairline-tertiary: #f1f5f9;
+      --color-ink: #090a0c;
+      --color-ink-muted: #334155;
+      --color-ink-subtle: #64748b;
+      --color-ink-tertiary: #94a3b8;
+      --color-primary: #5e6ad2;
+      --color-primary-hover: #4f5bb8;
+      --color-primary-focus: #5e69d1;
+      --color-brand-secure: #595e8a;
+      --color-semantic-success: #10b981;
+      --color-semantic-warning: #d97706;
+      --color-semantic-danger: #e11d48;
+      
+      --color-top-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --color-tick-active: #10b981;
+      --color-tick-inactive: #e2e8f0;
+      --color-tick-pending: #d97706;
+      --color-rail-bg: #ffffff;
+      --color-header-bg: rgba(248, 249, 250, 0.9);
+      --color-modal-scrim: rgba(15, 23, 42, 0.45);
+      --color-badge-bg: #f1f5f9;
+      --color-badge-text: #334155;
+      --color-table-stripe: rgba(0, 0, 0, 0.015);
+      --color-input-bg: #ffffff;
     }
 
-    .toast {
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
+    /* Base Typography & Reset */
+    body {
+      background-color: var(--color-canvas);
+      color: var(--color-ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      letter-spacing: -0.01em;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
+    /* Headings with Linear Negative Tracking */
+    h1 { letter-spacing: -0.035em; }
+    h2 { letter-spacing: -0.025em; }
+    h3 { letter-spacing: -0.02em; }
+    .eyebrow { letter-spacing: 0.05em; text-transform: uppercase; font-size: 11px; font-weight: 600; }
+
+    /* Linear Component Classes */
+    .linear-card {
+      background-color: var(--color-surface-1);
+      border: 1px solid var(--color-hairline);
+      border-radius: 12px;
+      box-shadow: var(--color-top-highlight), var(--card-shadow);
+      transition: all 0.15s ease;
+    }
+    .linear-card:hover {
+      background-color: var(--color-surface-2);
+      border-color: var(--color-hairline-strong);
+    }
+
+    .linear-panel {
+      background-color: var(--color-surface-1);
+      border: 1px solid var(--color-hairline);
+      border-radius: 12px;
+      box-shadow: var(--color-top-highlight), var(--card-shadow);
+    }
+
+    .linear-btn-primary {
+      background-color: var(--color-primary);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.12s ease, transform 0.08s ease;
+    }
+    .linear-btn-primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+    .linear-btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .linear-btn-secondary {
+      background-color: var(--color-surface-1);
+      color: var(--color-ink);
+      border: 1px solid var(--color-hairline);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.12s ease;
+    }
+    .linear-btn-secondary:hover {
+      background-color: var(--color-surface-2);
+      border-color: var(--color-hairline-strong);
+    }
+    .linear-btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    .linear-input {
+      background-color: var(--color-input-bg);
+      border: 1px solid var(--color-hairline);
+      color: var(--color-ink);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      transition: border-color 0.12s ease, box-shadow 0.12s ease;
+    }
+    .linear-input:focus {
+      outline: 2px solid var(--color-primary-focus);
+      outline-offset: 1px;
+      border-color: var(--color-hairline-strong);
+    }
+
+    .status-pill {
+      background-color: var(--color-surface-3);
+      color: var(--color-ink-muted);
+      border-radius: 9999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Tag Badges */
     .tag-initiative {
-      background: rgba(99, 102, 241, 0.15);
-      color: #a5b4fc;
-      border: 1px solid rgba(99, 102, 241, 0.35);
+      background-color: rgba(94, 106, 210, 0.12);
+      color: var(--color-primary);
+      border: 1px solid rgba(94, 106, 210, 0.25);
     }
     .tag-product {
-      background: rgba(6, 182, 212, 0.15);
-      color: #67e8f9;
-      border: 1px solid rgba(6, 182, 212, 0.35);
-    }
-    .tag-staff {
-      background: rgba(244, 63, 94, 0.15);
-      color: #fda4af;
-      border: 1px solid rgba(244, 63, 94, 0.35);
+      background-color: rgba(0, 229, 153, 0.1);
+      color: var(--color-semantic-success);
+      border: 1px solid rgba(0, 229, 153, 0.25);
     }
 
-    /* Drawer Transition */
-    .drawer-overlay {
-      transition: opacity 0.3s ease-in-out;
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-    .drawer-panel {
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    ::-webkit-scrollbar-track {
+      background: transparent;
     }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-hairline-strong);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-ink-subtle);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  
+    /* ==========================================================================
+       LIGHT MODE HARMONIZATION RULES
+       Ensures complete visual legibility across all pre-existing modals, tables & cards
+       ========================================================================== */
+    .glass-panel {
+      background-color: var(--color-surface-1);
+      border: 1px solid var(--color-hairline);
+      box-shadow: var(--color-top-highlight), var(--card-shadow);
+    }
+
+    html.light .text-white {
+      color: var(--color-ink);
+    }
+    html.light .text-slate-100,
+    html.light .text-slate-200,
+    html.light .text-slate-300 {
+      color: var(--color-ink);
+    }
+    html.light .text-slate-400 {
+      color: var(--color-ink-muted);
+    }
+    html.light .text-slate-500 {
+      color: var(--color-ink-subtle);
+    }
+    html.light .bg-slate-950,
+    html.light .bg-slate-900,
+    html.light .bg-slate-900\/80,
+    html.light .bg-slate-900\/60,
+    html.light .bg-slate-900\/40 {
+      background-color: var(--color-surface-2);
+    }
+    html.light .bg-slate-800,
+    html.light .bg-slate-800\/80,
+    html.light .bg-slate-800\/60,
+    html.light .bg-slate-800\/40 {
+      background-color: var(--color-surface-3);
+    }
+    html.light .border-slate-800,
+    html.light .border-slate-800\/80,
+    html.light .border-slate-700,
+    html.light .border-slate-700\/80,
+    html.light .border-slate-600 {
+      border-color: var(--color-hairline);
+    }
+
+    /* Preserve light text on dark badges, buttons, and avatar circles in light mode */
+    html.light .linear-btn-primary,
+    html.light .linear-btn-primary *,
+    html.light .bg-black\/60,
+    html.light .bg-black\/60 *,
+    html.light [class*="bg-gradient-"],
+    html.light [class*="bg-gradient-"] *,
+    html.light .status-pill.bg-black\/60,
+    html.light .status-pill.bg-black\/60 * {
+      color: #ffffff !important;
+    }
+
   </style>
 </head>
-<body class="bg-[#070b14] text-slate-100 min-h-screen font-body antialiased selection:bg-indigo-500 selection:text-white flex flex-col">
+<body class="selection:bg-indigo-500/30">
 
-  <!-- Background ambient glowing orbs -->
-  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-    <div class="absolute -top-40 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[140px]"></div>
-    <div class="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px]"></div>
-    <div class="absolute -bottom-40 left-1/3 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[140px]"></div>
-  </div>
-
-  <!-- Top Global Header -->
-  <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/20 flex items-center justify-center">
-          <div class="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
-            <i data-lucide="layers" class="w-5 h-5 text-cyan-400"></i>
-          </div>
+  <!-- =======================================================================
+       VOLTAGENT / LINEAR SLIM ICON SIDEBAR (RAIL)
+       ======================================================================= -->
+  <aside class="fixed top-0 left-0 bottom-0 w-14 z-40 hidden md:flex flex-col items-center justify-between py-3.5 border-r border-[var(--color-hairline)] bg-[var(--color-rail-bg)] backdrop-blur-md">
+    <!-- Brand Logo Top -->
+    <div class="flex flex-col items-center gap-4">
+      <div class="relative group cursor-pointer" onclick="switchScreen('approved')" title="Keysight NexusEXPO">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-500/25">
+          <i data-lucide="zap" class="w-4 h-4 text-white"></i>
         </div>
-        <div>
-          <span class="font-sans font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">NEXUS<span class="text-cyan-400">EXPO</span></span>
-          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] uppercase font-semibold tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">Keysight EventOps</span>
-        </div>
+        <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[var(--color-semantic-success)] border-2 border-[var(--color-rail-bg)] animate-pulse"></span>
       </div>
 
-      <!-- Global Search Bar with Command Indicator -->
-      <div class="flex-1 max-w-md hidden md:block">
-        <div class="relative">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-          <input 
-            type="text" 
-            id="searchInput"
-            placeholder="Search events, #initiatives, #products, leads, staff..." 
-            class="w-full pl-10 pr-16 py-2 bg-slate-900/80 border border-slate-700/60 rounded-xl text-sm placeholder-slate-400 text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-            oninput="handleSearch(this.value)"
-          />
-          <kbd class="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-800 border border-slate-700 rounded">⌘K</kbd>
-        </div>
-      </div>
-
-      <!-- Action Items & Profile -->
-      <div class="flex items-center gap-3">
-        <!-- Fiscal Settings Trigger Button -->
-        <button onclick="openFiscalSettingsModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/80 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs font-medium transition-colors" title="Configure Fiscal Calendar Parameters">
-          <i data-lucide="calendar-cog" class="w-4 h-4 text-cyan-400"></i>
-          <span id="navFiscalBadge" class="hidden sm:inline text-[11px] font-mono text-cyan-300">FY26 Q4</span>
+      <!-- Navigation Icons -->
+      <nav class="flex flex-col items-center gap-1 mt-3">
+        <button id="railBtnApproved" onclick="switchScreen('approved')" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors bg-[var(--color-surface-2)] text-[var(--color-primary)] border border-[var(--color-hairline)]" title="Approved Portfolio (13 Events)">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
         </button>
-
-        <!-- Primary Action: Contextual Add Button -->
-        <button onclick="handleHeaderPrimaryAction()" id="headerActionBtn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-semibold text-xs tracking-wide shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+        <button id="railBtnIntake" onclick="switchScreen('intake')" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)] relative" title="Intake & Approvals (5 Requests)">
+          <i data-lucide="inbox" class="w-4 h-4"></i>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400"></span>
+        </button>
+        <button id="railBtnYoY" onclick="switchScreen('yoy')" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]" title="YoY Budget & Churn Analyzer">
+          <i data-lucide="activity" class="w-4 h-4"></i>
+        </button>
+        <button onclick="toggleFilterDrawer()" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)] mt-2" title="Toggle Filters Drawer">
+          <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+        </button>
+        <button onclick="handleHeaderPrimaryAction()" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]" title="Submit Proposal / Event">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
-          <span id="headerActionText" class="hidden sm:inline">Add Event</span>
-          <span class="sm:hidden">Add</span>
         </button>
+      </nav>
+    </div>
 
-        <!-- User Profile Avatar -->
-        <div class="flex items-center gap-2.5 pl-2 border-l border-slate-800">
-          <div class="w-8 h-8 rounded-full ring-2 ring-cyan-500/40 overflow-hidden bg-slate-800">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="w-full h-full object-cover">
-          </div>
-          <div class="hidden xl:block text-left">
-            <p class="text-xs font-semibold text-slate-200 leading-tight">Sarah Jenkins</p>
-            <p class="text-[10px] text-slate-400">Director, EventOps</p>
-          </div>
-        </div>
+    <!-- Bottom Actions: Theme Toggle, Settings, User -->
+    <div class="flex flex-col items-center gap-2">
+      <!-- Theme Switcher Icon Button -->
+      <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]" title="Toggle Light / Dark Mode (⌘D)">
+        <i id="railThemeIcon" data-lucide="sun" class="w-4 h-4"></i>
+      </button>
+      <button onclick="openFiscalSettingsModal()" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]" title="Fiscal Calendar Settings">
+        <i data-lucide="calendar-cog" class="w-4 h-4"></i>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-xs font-semibold mt-1 shadow-inner border border-white/20" title="Zack (EventOps Lead)">
+        Z
       </div>
     </div>
-  </header>
+  </aside>
 
-  <!-- PRIMARY APPLICATION SCREEN NAVIGATION BAR -->
-  <nav class="sticky top-16 z-30 w-full bg-[#080c18]/95 backdrop-blur-xl border-b border-slate-800/80 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-14">
+  <!-- =======================================================================
+       MAIN APPLICATION SHELL
+       ======================================================================= -->
+  <div class="md:ml-14 min-h-screen flex flex-col">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-30 border-b border-[var(--color-hairline)] bg-[var(--color-header-bg)] backdrop-blur-md px-4 sm:px-6 py-2.5">
+      <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         
-        <!-- Screen Tabs -->
-        <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1">
-          <!-- 1. Approved Portfolio Tab -->
-          <button 
-            onclick="switchScreen('approved')" 
-            id="tabBtnApproved" 
-            class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm"
-          >
-            <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
-            <span>Approved Portfolio</span>
-            <span id="navApprovedCountBadge" class="px-1.5 py-0.2 rounded-full bg-cyan-500/30 text-cyan-200 text-[10px] font-mono">13 Active</span>
-          </button>
+        <!-- Left Breadcrumbs & Connection Badge (VoltAgent Screenshot Style) -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="flex items-center gap-1.5 text-xs font-medium">
+            <span class="text-[var(--color-ink)] font-semibold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[var(--color-primary)]"></span>
+              VoltNexus
+            </span>
+            <span class="px-1.5 py-0.5 rounded bg-[var(--color-surface-3)] text-[11px] font-mono text-[var(--color-ink-muted)]">Core</span>
+            <span class="text-[var(--color-ink-subtle)]">/</span>
+            <span class="text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] cursor-pointer">Marketing EventOps</span>
+          </div>
 
-          <!-- 2. Intake & Approvals Hub Tab -->
-          <button 
-            onclick="switchScreen('intake')" 
-            id="tabBtnIntake" 
-            class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent"
-          >
-            <i data-lucide="inbox" class="w-4 h-4 text-amber-400"></i>
-            <span>Intake & Approvals</span>
-            <span id="navIntakeCountBadge" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold">4 Pending</span>
-          </button>
+          <div class="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-mono bg-[var(--color-surface-2)] border border-[var(--color-hairline)] text-[var(--color-ink-muted)]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-semantic-success)] animate-pulse"></span>
+            <span>api.keysight.internal:8443</span>
+          </div>
 
-          <!-- 3. YoY Portfolio & Budget Shift Tab -->
-          <button 
-            onclick="switchScreen('yoy')" 
-            id="tabBtnYoY" 
-            class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent"
-          >
-            <i data-lucide="line-chart" class="w-4 h-4 text-purple-400"></i>
-            <span>YoY Budget & Churn</span>
-            <span class="hidden md:inline px-1.5 py-0.2 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono">FY26 vs FY25</span>
-          </button>
-        </div>
-
-        <!-- Right Current Mode Context Indicator -->
-        <div class="hidden sm:flex items-center gap-3">
-          <div id="screenContextPill" class="text-xs text-slate-400 flex items-center gap-2 font-medium">
-            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span id="screenContextText">Approved Event Operations Hub</span>
+          <div class="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium text-[var(--color-semantic-success)] bg-emerald-500/10 border border-emerald-500/20">
+            <i data-lucide="check-circle" class="w-3 h-3"></i>
+            <span>Connected</span>
           </div>
         </div>
 
+        <!-- Center: Screen Segmented Switcher -->
+        <div class="flex items-center justify-center">
+          <div class="inline-flex p-1 rounded-xl bg-[var(--color-surface-2)] border border-[var(--color-hairline)]">
+            <button onclick="switchScreen('approved')" id="tabBtnApproved" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-[var(--color-surface-1)] text-[var(--color-ink)] shadow-sm">
+              Approved Portfolio <span class="ml-1 opacity-70">(13)</span>
+            </button>
+            <button onclick="switchScreen('intake')" id="tabBtnIntake" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all text-[var(--color-ink-subtle)] hover:text-[var(--color-ink)] relative flex items-center gap-1.5">
+              Intake & Approvals
+              <span class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-semibold border border-amber-500/30">4</span>
+            </button>
+            <button onclick="switchScreen('yoy')" id="tabBtnYoY" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all text-[var(--color-ink-subtle)] hover:text-[var(--color-ink)]">
+              YoY Budget & Churn
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Tools: Search, Filter Drawer, Theme Switcher, Action -->
+        <div class="flex items-center justify-end gap-2 shrink-0">
+          <!-- Search ⌘K Trigger -->
+          <button onclick="document.getElementById('searchInput')?.focus()" class="hidden xl:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[var(--color-hairline)] bg-[var(--color-surface-1)] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] text-xs">
+            <i data-lucide="search" class="w-3.5 h-3.5"></i>
+            <span>Search</span>
+            <kbd class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--color-surface-3)] text-[var(--color-ink-subtle)]">⌘K</kbd>
+          </button>
+
+          <!-- Filter Drawer Trigger Button -->
+          <button onclick="toggleFilterDrawer()" id="headerDrawerBtn" class="linear-btn-secondary relative text-xs">
+            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+            <span>Filters</span>
+            <span id="activeFilterBadgeHeader" class="hidden px-1.5 py-0.2 rounded-full bg-[var(--color-primary)] text-white text-[10px] font-bold">0</span>
+          </button>
+
+          <!-- Explicit Theme Switcher Button (Dark / Light) -->
+          <button onclick="toggleTheme()" id="themeToggleBtn" class="linear-btn-secondary text-xs" title="Switch between Light and Dark mode">
+            <i id="themeToggleIcon" data-lucide="sun" class="w-3.5 h-3.5"></i>
+            <span id="themeToggleText">Light</span>
+          </button>
+
+          <!-- Primary Screen Action Button -->
+          <button onclick="handleHeaderPrimaryAction()" id="headerPrimaryActionBtn" class="linear-btn-primary">
+            <i id="headerPrimaryActionIcon" data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <span id="headerPrimaryActionText">+ Add Event</span>
+          </button>
+        </div>
+
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 w-full">
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5">
 
-    <!-- ================================================================= -->
-    <!-- SCREEN 1: APPROVED PORTFOLIO (OPERATIONAL HUB)                    -->
-    <!-- ================================================================= -->
-    <div id="screenApproved" class="screen-view">
+      <!-- ===================================================================
+           VOLTAGENT SIGNATURE TELEMETRY BAR (Segmented Ticks from Screenshot)
+           =================================================================== -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        
+        <!-- Telemetry Card 1: Execution & Budget Telemetry -->
+        <div class="linear-card p-4 sm:p-5">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <span class="eyebrow text-[var(--color-semantic-success)]">Operations Telemetry</span>
+              <h3 class="text-base font-semibold text-[var(--color-ink)] mt-0.5">Portfolio Execution & Readiness</h3>
+              <p class="text-xs text-[var(--color-ink-muted)]">Verified readiness status, hardware allocation, and budget sweep pipeline</p>
+            </div>
+            <span class="status-pill text-xs font-mono">FY26 Target</span>
+          </div>
+
+          <!-- Metric Row 1: Success Rate with 40-segmented tick bar -->
+          <div class="mt-3.5">
+            <div class="flex items-center justify-between text-xs mb-1.5">
+              <span class="font-medium text-[var(--color-ink)]">Execution Readiness: <span class="text-[var(--color-semantic-success)] font-semibold">84.6%</span></span>
+              <span class="text-[11px] text-[var(--color-ink-muted)] font-mono">11 / 13 Locked</span>
+            </div>
+            <!-- Dynamic 40-Tick Bar -->
+            <div id="telemetryTickBarReadiness" class="py-1">
+              <!-- Rendered via JS -->
+            </div>
+            <div class="flex justify-between text-[10px] text-[var(--color-ink-subtle)] font-mono mt-0.5">
+              <span>0%</span>
+              <span>75% Target</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <!-- Metric Row 2: Total Budget with Multi-Status Segmented Tick Bar -->
+          <div class="mt-3 pt-3 border-t border-[var(--color-hairline)]">
+            <div class="flex items-center justify-between text-xs mb-1.5">
+              <span class="font-medium text-[var(--color-ink)]">Allocated Envelope: <span class="text-[var(--color-ink)] font-semibold">$1,965,000</span></span>
+              <span class="text-[11px] text-[var(--color-ink-muted)] font-mono">17.3% YoY Growth</span>
+            </div>
+            <!-- Multi-status tick bar (green = funded, amber = in review, grey = reserve) -->
+            <div id="telemetryTickBarBudget" class="py-1">
+              <!-- Rendered via JS -->
+            </div>
+            
+            <!-- Legend (Matches VoltAgent screenshot) -->
+            <div class="flex flex-wrap items-center gap-3 text-[11px] text-[var(--color-ink-muted)] mt-2">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[var(--color-semantic-success)]"></span>
+                <span>13 Approved & Funded</span>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[var(--color-semantic-warning)]"></span>
+                <span>4 Proposals In Review</span>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[var(--color-ink-tertiary)]"></span>
+                <span>3 Retired Shows</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetry Card 2: Strategic Taxonomy & Audience Impact -->
+        <div class="linear-card p-4 sm:p-5">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <span class="eyebrow text-[var(--color-primary)]">Strategic Footprint</span>
+              <h3 class="text-base font-semibold text-[var(--color-ink)] mt-0.5">Initiatives & Audience Velocity</h3>
+              <p class="text-xs text-[var(--color-ink-muted)]">Cross-pillar alignment (#AI, #CyberSecurity, #Carriers) and qualified reach</p>
+            </div>
+            <span class="status-pill text-xs font-mono">Global Portfolio</span>
+          </div>
+
+          <!-- Metric Row 1: Initiatives Coverage with Lavender Ticks -->
+          <div class="mt-3.5">
+            <div class="flex items-center justify-between text-xs mb-1.5">
+              <span class="font-medium text-[var(--color-ink)]">Initiatives Footprint: <span class="text-[var(--color-primary)] font-semibold">100% Coverage</span></span>
+              <span class="text-[11px] text-[var(--color-ink-muted)] font-mono">7 of 7 Strategic Pillars</span>
+            </div>
+            <!-- Dynamic 40-Tick Bar in Primary Lavender -->
+            <div id="telemetryTickBarInitiatives" class="py-1">
+              <!-- Rendered via JS -->
+            </div>
+            <div class="flex justify-between text-[10px] text-[var(--color-ink-subtle)] font-mono mt-0.5">
+              <span>0%</span>
+              <span>50%</span>
+              <span>100% Core</span>
+            </div>
+          </div>
+
+          <!-- Metric Row 2: Audience Reach with Multi-Status Ticks -->
+          <div class="mt-3 pt-3 border-t border-[var(--color-hairline)]">
+            <div class="flex items-center justify-between text-xs mb-1.5">
+              <span class="font-medium text-[var(--color-ink)]">Total Verified Reach: <span class="text-[var(--color-ink)] font-semibold">216,000</span></span>
+              <span class="text-[11px] text-[var(--color-ink-muted)] font-mono">Target: 6,850 Leads</span>
+            </div>
+            <!-- Multi-status tick bar (lavender = Tier 1, cyan = Tier 2, amber = Tier 3) -->
+            <div id="telemetryTickBarTiers" class="py-1">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Legend -->
+            <div class="flex flex-wrap items-center gap-3 text-[11px] text-[var(--color-ink-muted)] mt-2">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[var(--color-primary)]"></span>
+                <span>5 Tier-1 Flagship</span>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span>5 Tier-2 Strategic</span>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span>3 Tier-3 Regional</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+
+<!-- SCREEN 1: APPROVED PORTFOLIO -->
+<div id="screenApproved" class="screen-view">
       
       <!-- Hero & Stats Header -->
       <div class="mb-6">
@@ -448,7 +763,9 @@
     <!-- ================================================================= -->
     <!-- SCREEN 2: INTAKE & APPROVALS HUB (SEPARATE GOVERNANCE WORKFLOW)   -->
     <!-- ================================================================= -->
-    <div id="screenIntake" class="screen-view hidden">
+
+<!-- SCREEN 2: INTAKE & APPROVALS -->
+<div id="screenIntake" class="screen-view hidden">
       
       <!-- Intake Header -->
       <div class="mb-6 pb-5 border-b border-slate-800/80">
@@ -579,7 +896,9 @@
     <!-- ================================================================= -->
     <!-- SCREEN 3: YOY PORTFOLIO & BUDGET SHIFT ANALYZER                   -->
     <!-- ================================================================= -->
-    <div id="screenYoY" class="screen-view hidden">
+
+<!-- SCREEN 3: YOY BUDGET ANALYZER -->
+<div id="screenYoY" class="screen-view hidden">
       
       <!-- YoY Header -->
       <div class="mb-6 pb-5 border-b border-slate-800/80">
@@ -748,10 +1067,9 @@
       </div>
 
     </div>
-
-  </main>
-
-  <!-- SLIDE-OVER FACETED FILTER DRAWER -->
+</main>
+</div>
+<!-- SLIDE-OVER FACETED FILTER DRAWER -->
   <div id="filterDrawer" class="fixed inset-0 z-50 flex justify-end pointer-events-none transition-all">
     <!-- Backdrop -->
     <div id="filterDrawerBackdrop" onclick="toggleFilterDrawer()" class="drawer-overlay absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -900,8 +1218,7 @@
 
     </div>
   </div>
-
-  <!-- Fiscal Settings Modal -->
+<!-- Fiscal Settings Modal -->
   <div id="fiscalSettingsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div id="fiscalSettingsContent" class="glass-panel border border-slate-700/80 rounded-3xl max-w-lg w-full p-6 sm:p-8 transform scale-95 transition-transform duration-300 shadow-2xl relative">
       <div class="flex items-center justify-between pb-4 border-b border-slate-800">
@@ -953,8 +1270,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Add / Edit Conference Modal (For Approved Events) -->
+<!-- Add / Edit Conference Modal (For Approved Events) -->
   <div id="eventFormModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div id="eventFormModalContent" class="glass-panel border border-slate-700/80 rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto transform scale-95 transition-transform duration-300 shadow-2xl relative p-6 sm:p-8">
       
@@ -1124,8 +1440,7 @@
       </form>
     </div>
   </div>
-
-  <!-- INTAKE PROPOSAL SUBMISSION MODAL (FOR SALES / PM SPONSORSHIP REQUESTS) -->
+<!-- INTAKE PROPOSAL SUBMISSION MODAL (FOR SALES / PM SPONSORSHIP REQUESTS) -->
   <div id="intakeProposalModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div class="glass-panel border border-amber-700/80 rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto transform scale-95 transition-transform duration-300 shadow-2xl relative p-6 sm:p-8">
       
@@ -1236,8 +1551,7 @@
       </form>
     </div>
   </div>
-
-  <!-- EVENT DETAIL SLIDE-OVER / MODAL -->
+<!-- EVENT DETAIL SLIDE-OVER / MODAL -->
   <div id="eventModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
     <div id="modalContent" class="glass-panel border border-slate-700/80 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 shadow-2xl relative">
       <div id="modalHeaderImg" class="h-64 sm:h-72 w-full relative bg-cover bg-center">
@@ -1345,8 +1659,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Toast Notification -->
+<!-- Toast Notification -->
   <div id="toastNotification" class="toast fixed bottom-6 right-6 z-50 glass-panel border border-cyan-500/40 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
     <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
       <i data-lucide="check-circle" class="w-4 h-4"></i>
@@ -1358,30 +1671,8 @@
   </div>
 
   <!-- JAVASCRIPT LOGIC ENGINE -->
-  <script>
-    // -------------------------------------------------------------
-    // FISCAL CONFIGURATION & CALENDAR ENGINE
-    // -------------------------------------------------------------
-    let fiscalConfig = {
-      startMonth: 11,
-      startDay: 1,
-      referenceDate: '2026-09-03'
-    };
-
-    try {
-      const savedConfig = localStorage.getItem('nexusexpo_fiscal_config');
-      if (savedConfig) {
-        fiscalConfig = Object.assign({}, fiscalConfig, JSON.parse(savedConfig));
-      }
-    } catch(e) {}
-
-    // Current Application Screen: 'approved' | 'intake' | 'yoy'
-    let currentScreen = 'approved';
-
-    // -------------------------------------------------------------
-    // APPROVED EVENTS DATASET
-    // -------------------------------------------------------------
-    let conferences = [
+<script>
+let conferences = [
       {
         id: 101,
         seriesId: 'mwc',
@@ -1816,7 +2107,8 @@
     // -------------------------------------------------------------
     // INTAKE & SPONSORSHIP REQUESTS (GOVERNANCE PIPELINE)
     // -------------------------------------------------------------
-    let intakeRequests = [
+
+let intakeRequests = [
       {
         id: 501,
         title: "DefCon 34 Operator & Hardware Village 2027",
@@ -1938,9 +2230,8 @@
     let currentIntakeViewMode = 'grid';
 
     // -------------------------------------------------------------
-    // HISTORICAL BASELINE PORTFOLIO (FY25 RECONCILIATION DATA)
-    // -------------------------------------------------------------
-    const historicalEventsFY25 = [
+
+const historicalEventsFY25 = [
       // Recurring in FY26
       { seriesId: 'mwc', title: 'MWC Global Mobile 2025', budget: 220000, region: 'Europe', leads: 910 },
       { seriesId: 'blackhat', title: 'Black Hat Security USA 2025', budget: 210000, region: 'Americas', leads: 780 },
@@ -2004,8 +2295,124 @@
     let customEndDate = '';
     let searchQuery = '';
     let currentSort = 'date-asc';
-    let currentViewMode = 'grid'; 
-    let currentActiveModalId = null;
+    let currentViewMode = 'grid';
+
+
+    // =========================================================================
+    // LINEAR TELEMETRY TICK BARS & THEME ENGINE
+    // =========================================================================
+    function renderTickBar(percent, totalTicks = 40, type = 'success') {
+      const activeCount = Math.round((Math.min(100, Math.max(0, percent)) / 100) * totalTicks);
+      let ticksHtml = '';
+      for (let i = 0; i < totalTicks; i++) {
+        const isLit = i < activeCount;
+        let litColor = 'var(--color-tick-active)';
+        if (type === 'primary') litColor = 'var(--color-primary)';
+        if (type === 'warning') litColor = 'var(--color-tick-pending)';
+        const color = isLit ? litColor : 'var(--color-tick-inactive)';
+        ticksHtml += `<span style="width: 2.5px; height: 12px; border-radius: 1px; background-color: ${color}; display: inline-block; margin-right: 1.5px;"></span>`;
+      }
+      return `<div style="display: flex; align-items: center; overflow: hidden; height: 16px;">${ticksHtml}</div>`;
+    }
+
+    function renderMultiStatusTickBar(totalTicks, greenTicks, redTicks, yellowTicks) {
+      let ticksHtml = '';
+      for (let i = 0; i < totalTicks; i++) {
+        let color = 'var(--color-tick-inactive)';
+        if (i < greenTicks) {
+          color = 'var(--color-tick-active)';
+        } else if (i < greenTicks + redTicks) {
+          color = 'var(--color-semantic-danger)';
+        } else if (i < greenTicks + redTicks + yellowTicks) {
+          color = 'var(--color-tick-pending)';
+        }
+        ticksHtml += `<span style="width: 2.5px; height: 12px; border-radius: 1px; background-color: ${color}; display: inline-block; margin-right: 1.5px;"></span>`;
+      }
+      return `<div style="display: flex; align-items: center; overflow: hidden; height: 16px;">${ticksHtml}</div>`;
+    }
+
+    function updateTopTelemetry() {
+      const readinessEl = document.getElementById('telemetryTickBarReadiness');
+      const budgetEl = document.getElementById('telemetryTickBarBudget');
+      const initEl = document.getElementById('telemetryTickBarInitiatives');
+      const tiersEl = document.getElementById('telemetryTickBarTiers');
+
+      if (readinessEl) {
+        readinessEl.innerHTML = renderTickBar(85, 48, 'success');
+      }
+      if (budgetEl) {
+        budgetEl.innerHTML = renderMultiStatusTickBar(48, 34, 0, 8);
+      }
+      if (initEl) {
+        initEl.innerHTML = renderTickBar(100, 48, 'primary');
+      }
+      if (tiersEl) {
+        let ticksHtml = '';
+        for (let i = 0; i < 48; i++) {
+          let color = 'var(--color-primary)';
+          if (i >= 20 && i < 38) color = '#22d3ee';
+          else if (i >= 38) color = '#f59e0b';
+          ticksHtml += `<span style="width: 2.5px; height: 12px; border-radius: 1px; background-color: ${color}; display: inline-block; margin-right: 1.5px;"></span>`;
+        }
+        tiersEl.innerHTML = `<div style="display: flex; align-items: center; overflow: hidden; height: 16px;">${ticksHtml}</div>`;
+      }
+    }
+
+    // THEME MANAGEMENT (Dark / Light Mode)
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isLight = html.classList.contains('light');
+      const newTheme = isLight ? 'dark' : 'light';
+      setTheme(newTheme);
+    }
+
+    function setTheme(theme) {
+      const html = document.documentElement;
+      if (theme === 'light') {
+        html.classList.remove('dark');
+        html.classList.add('light');
+      } else {
+        html.classList.remove('light');
+        html.classList.add('dark');
+      }
+      try {
+        localStorage.setItem('nexus_theme', theme);
+      } catch (e) {}
+      updateThemeUI(theme);
+
+      // Refresh views
+      if (typeof render === 'function') render();
+      if (typeof renderIntake === 'function' && currentScreen === 'intake') renderIntake();
+      if (typeof renderYoY === 'function' && currentScreen === 'yoy') renderYoY();
+      updateTopTelemetry();
+    }
+
+    function updateThemeUI(theme) {
+      const btnIcon = document.getElementById('themeToggleIcon');
+      const btnText = document.getElementById('themeToggleText');
+      const railIcon = document.getElementById('railThemeIcon');
+
+      if (theme === 'light') {
+        if (btnIcon) btnIcon.setAttribute('data-lucide', 'moon');
+        if (btnText) btnText.textContent = 'Dark';
+        if (railIcon) railIcon.setAttribute('data-lucide', 'moon');
+      } else {
+        if (btnIcon) btnIcon.setAttribute('data-lucide', 'sun');
+        if (btnText) btnText.textContent = 'Light';
+        if (railIcon) railIcon.setAttribute('data-lucide', 'sun');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Initial theme check
+    try {
+      const savedTheme = localStorage.getItem('nexus_theme') || 'dark';
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    } catch (e) {}
+let currentActiveModalId = null;
 
     // Category Style Configuration
     const categoryConfig = {
@@ -2562,74 +2969,90 @@
 
         const initPills = (event.initiatives || []).slice(0, 3).map(i => `<span class="tag-initiative text-[10px] px-2 py-0.5 rounded-md font-mono">${i}</span>`).join('');
         const prodPills = (event.products || []).slice(0, 2).map(p => `<span class="tag-product text-[10px] px-2 py-0.5 rounded-md font-mono">${p}</span>`).join('');
+        
+        // Linear Telemetry Tick Bar (Execution Readiness Score)
+        const readinessScore = event.status === 'Completed' ? 100 : (event.status === 'Registration Open' ? 88 : 70);
+        const tickBar = renderTickBar(readinessScore, 24, 'success');
 
         return `
-          <div onclick="openModal(${event.id})" class="group relative rounded-3xl overflow-hidden glass-panel border border-slate-800 hover:border-slate-700/80 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1.5 flex flex-col cursor-pointer h-[440px]">
+          <div onclick="openModal(${event.id})" class="linear-card group relative overflow-hidden flex flex-col cursor-pointer transition-all duration-200 hover:-translate-y-1">
             
-            <!-- Image Backdrop -->
-            <div class="absolute inset-0 z-0">
-              <img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-105 filter brightness-90">
-              <div class="absolute inset-0 card-top-vignette pointer-events-none"></div>
-              <div class="absolute inset-0 card-gradient-overlay pointer-events-none"></div>
-            </div>
-
-            <!-- Card Header Overlay -->
-            <div class="relative z-10 p-5 flex items-center justify-between">
-              <span class="glass-badge badge-shimmer px-3 py-1 rounded-full text-xs font-semibold tracking-wide border flex items-center gap-1.5 ${catConfig.gradient}">
-                <i data-lucide="${catConfig.icon}" class="w-3.5 h-3.5"></i>
-                <span>${event.category}</span>
-              </span>
-
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-800/80">
-                  ${fiscalTag}
+            <!-- Framed Photography Header (Linear App Style) -->
+            <div class="relative h-44 w-full overflow-hidden border-b border-[var(--color-hairline)]">
+              <img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover object-center transform transition-transform duration-500 group-hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-surface-1)] via-black/25 to-transparent"></div>
+              
+              <!-- Top Badges Overlay -->
+              <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                <span class="status-pill text-xs font-semibold backdrop-blur-md bg-black/60 text-white border border-white/10 flex items-center gap-1.5">
+                  <i data-lucide="${catConfig.icon}" class="w-3 h-3 text-[var(--color-primary)]"></i>
+                  <span>${event.category}</span>
                 </span>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${statusBadgeClass}">
-                  ${event.status}
-                </span>
-              </div>
-            </div>
-
-            <!-- Card Content Body -->
-            <div class="relative z-10 mt-auto p-5 space-y-3">
-              <div class="flex items-center gap-2 text-xs text-slate-300 font-medium">
-                <span class="flex items-center gap-1 text-cyan-300 font-semibold">
-                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i>
-                  ${event.shortLocation || event.city}
-                </span>
-                <span class="text-slate-500">•</span>
-                <span class="flex items-center gap-1 text-slate-300">
-                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i>
-                  ${event.dates}
-                </span>
-              </div>
-
-              <h3 class="text-lg font-bold font-sans text-white group-hover:text-cyan-300 transition-colors line-clamp-2 leading-snug">
-                ${event.title}
-              </h3>
-
-              <!-- Initiatives & Products -->
-              <div class="flex flex-wrap gap-1 pt-1">
-                ${initPills}
-                ${prodPills}
-              </div>
-
-              <!-- Card Footer: Assigned Lead & Budget -->
-              <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
                 <div class="flex items-center gap-1.5">
-                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-400"></i>
-                  <span class="text-slate-300 font-medium">${event.leadManager || 'EventOps'}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-black/60 backdrop-blur-md text-cyan-300 border border-cyan-500/30">
+                    ${fiscalTag}
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-medium backdrop-blur-md ${statusBadgeClass}">
+                    ${event.status}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Body on Surface-1 -->
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                <!-- Location & Date Row -->
+                <div class="flex items-center gap-2 text-xs text-[var(--color-ink-muted)] mb-1.5">
+                  <span class="flex items-center gap-1 text-[var(--color-primary)] font-medium">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                    ${event.shortLocation || event.city}
+                  </span>
+                  <span class="text-[var(--color-ink-subtle)]">•</span>
+                  <span class="flex items-center gap-1 text-[var(--color-ink-muted)]">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                    ${event.dates}
+                  </span>
+                </div>
+
+                <!-- Title with Linear negative letter tracking -->
+                <h3 class="text-base font-semibold text-[var(--color-ink)] group-hover:text-[var(--color-primary)] transition-colors line-clamp-2 leading-snug">
+                  ${event.title}
+                </h3>
+
+                <!-- Telemetry Tick Bar -->
+                <div class="mt-2.5 pt-2 border-t border-[var(--color-hairline)]">
+                  <div class="flex items-center justify-between text-[11px] mb-1">
+                    <span class="text-[var(--color-ink-muted)]">Readiness Velocity</span>
+                    <span class="font-mono text-[var(--color-semantic-success)] font-semibold">${readinessScore}%</span>
+                  </div>
+                  ${tickBar}
+                </div>
+
+                <!-- Initiatives & Products -->
+                <div class="flex flex-wrap gap-1 mt-2.5">
+                  ${initPills}
+                  ${prodPills}
+                </div>
+              </div>
+
+              <!-- Card Footer: Staff Lead & Financials -->
+              <div class="pt-3 border-t border-[var(--color-hairline)] flex items-center justify-between text-xs text-[var(--color-ink-muted)]">
+                <div class="flex items-center gap-1.5">
+                  <div class="w-5 h-5 rounded-full bg-[var(--color-surface-3)] text-[var(--color-ink)] flex items-center justify-center text-[10px] font-bold border border-[var(--color-hairline)]">
+                    ${(event.leadManager || 'E').charAt(0)}
+                  </div>
+                  <span class="text-[var(--color-ink)] font-medium">${event.leadManager || 'EventOps'}</span>
                 </div>
                 <div class="flex items-center gap-2 font-mono">
-                  <span class="text-cyan-400 font-bold">${event.budget || '$0'}</span>
-                  <span class="text-slate-500">•</span>
-                  <span class="text-slate-300">${event.attendeesDisplay || '0'} att</span>
+                  <span class="text-[var(--color-ink)] font-bold">${event.budget || '$0'}</span>
+                  <span class="text-[var(--color-ink-subtle)]">•</span>
+                  <span class="text-[var(--color-ink-muted)]">${event.attendeesDisplay || '0'} att</span>
                 </div>
               </div>
+
             </div>
 
-            <!-- Focus Hover Ring -->
-            <div class="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-cyan-400/40 pointer-events-none transition-colors duration-300"></div>
           </div>
         `;
       }).join('');
@@ -3683,6 +4106,18 @@
       render();
       lucide.createIcons();
     });
-  </script>
+
+    // Keyboard shortcut for Theme Toggle (⌘D or Ctrl+D)
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+
+    // Initialize Top Telemetry on startup
+    setTimeout(updateTopTelemetry, 100);
+    
+</script>
 </body>
 </html>

@@ -196,10 +196,39 @@ Where:
 - **Target Spend ($T$)**: Final planned spend for the target fiscal year (e.g. FY26: $1,965,000). Net Variance: +$290,000 (+17.3% expansion).
 
 NexusEXPO renders this via an interactive **4-Pillar Visual Waterfall Bridge** and categorized tabular ledger enabling drill-down across `All Dynamics`, `New Additions`, `Dropped Shows`, and `Retained Core`.
+---
+
+### 1.8 Linear Design System & Bi-Modal Theme Architecture (Dark & Light)
+
+#### Design System Blueprint (`design-linear.md`)
+To align with high-performance developer tools (Linear, VoltAgent), NexusEXPO implements the canonical **Linear Design System**:
+1. **Dark Canvas Baseline**: `{colors.canvas}` is `#010102` (deepest near-pure black with a faint blue tint).
+2. **Four-Step Surface Ladder**:
+   - `surface-1` (`#0c0d10`): Feature cards, event panels, table containers.
+   - `surface-2` (`#15171c`): Lifted tiles, hover states, form inputs.
+   - `surface-3` (`#1e2027`): Sub-nav, filter pills, dropdowns.
+   - `surface-4` (`#282b35`): Deepest lifted surfaces and popovers.
+3. **Hairline Precision**: 1px borders running from `{colors.hairline}` (`#23252a`) to `{colors.hairline-strong}` (`#363a45`), complemented by a 1px top edge highlight (`inset 0 1px 0 0 rgba(255,255,255,0.08)`).
+4. **Chromatic Accents**: Signature Linear lavender-blue `{colors.primary}` (`#5e6ad2`, hover `#828fff`, focus `#5e69d1`) combined with high-contrast semantic emerald/mint `{colors.semantic-success}` (`#00e599` / `#10b981`) for live telemetry and operational status.
+
+#### In-Product Light Theme Architecture
+While marketing is dark-canvas, the internal event operations hub delivers an executive-grade Light Theme:
+- Canvas: `#f8f9fa` (clean modern grey canvas).
+- Surface Ladder: `surface-1` (`#ffffff`), `surface-2` (`#f1f3f5`), `surface-3` (`#e9ecef`).
+- Hairlines: `#e2e8f0` and `#cbd5e1`.
+- Ink Typography: `#090a0c` (deep near-black slate) with muted `#334155` and subtle `#64748b`.
+- Preserved Lavender & Emerald accents for cross-mode visual continuity.
+- Toggleable via top header button, left slim sidebar, or `⌘D` / `Ctrl+D` shortcut, persisted to `localStorage`.
+
+#### VoltAgent Telemetry & Segmented Tick Bar Engine
+Inspired by developer observability dashboards, each event card and the global executive header feature interactive **Segmented Tick Bars**:
+- 40-tick operations telemetry tracking real-time readiness velocity.
+- Multi-status segmented tick bars for budget allocation (funded, under review, and reserve).
 
 ---
 
 ## Section 2: Features, Microtasks & Implementation Checklist
+
 
 
 ### Feature 1: Executive Dashboard & Modern Viewport Architecture
@@ -292,3 +321,12 @@ NexusEXPO renders this via an interactive **4-Pillar Visual Waterfall Bridge** a
 - [x] Discontinuation Rationale & Net Savings tracking for dropped events (e.g. Interop Tokyo, RSA Conf, CeBIT) <!-- Implemented in index.html:L1943-L2000, L3280-L3320 -->
 - [x] Real-time mathematical reconciliation verifying $\text{Target} = \text{Baseline} - \text{Dropped} + \text{New} \pm \text{Retained}$ <!-- Implemented in index.html:L3140-L3245 -->
 - [ ] *[Production]* Exportable CFO Executive Summary Brief (PDF/Excel) summarizing YoY budget shifts and ROI rationale
+
+### Feature 13: Linear Design System, Segmented Telemetry & Bi-Modal Theme (Light & Dark)
+- [x] Canonical Linear dark canvas (`#010102`), 4-step surface ladder (`#0c0d10` to `#282b35`), and hairline borders (`#23252a`) <!-- Implemented in index.html:L62-L100 -->
+- [x] Full in-product Light Mode (`#f8f9fa` canvas, `#ffffff` surface-1, `#e2e8f0` hairlines, `#090a0c` typography) <!-- Implemented in index.html:L102-L140, L250-L310 -->
+- [x] Seamless Bi-Modal Theme Switcher button in top header, slim left sidebar icon, and global keyboard shortcut (`⌘D` / `Ctrl+D`) with localStorage persistence <!-- Implemented in index.html:L205-L215, L265-L275, L3480-L3525 -->
+- [x] VoltAgent / Linear slim vertical icon rail (56px) with animated brand mark, active screen indicators, and quick tools <!-- Implemented in index.html:L330-L375 -->
+- [x] Interactive Segmented Tick Bar Telemetry component (40-segmented micro-tick bars for execution readiness and budget allocation) <!-- Implemented in index.html:L430-L515, L3440-L3475 -->
+- [x] 12px rounded Linear cards (`rounded-[12px]`) with negative display letter tracking (`-0.4px`), framed photography, and mini telemetry tick bars <!-- Implemented in index.html:L3530-L3620 -->
+- [x] Responsive layout with breadcrumb workspace switcher and active host status pill (`api.keysight.internal:8443` ● Connected) <!-- Implemented in index.html:L380-L420 -->
