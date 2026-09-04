@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusEvents — Global Trade Show & Conference Hub</title>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              500: '#0284c7',
+              600: '#0369a1',
+              accent: '#6366f1'
+            }
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.4)',
+            'glow-purple': '0 0 25px -5px rgba(168, 85, 247, 0.4)',
+            'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.4)',
+            'card-hover': '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px 0 rgba(255, 255, 255, 0.05)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Smooth custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-badge {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .card-gradient-overlay {
+      background: linear-gradient(
+        180deg,
+        rgba(15, 23, 42, 0.25) 0%,
+        rgba(15, 23, 42, 0.45) 40%,
+        rgba(10, 15, 29, 0.88) 75%,
+        rgba(7, 10, 20, 0.98) 100%
+      );
+    }
+
+    .card-top-vignette {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
+    }
+
+    .badge-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .badge-shimmer::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent, rgba(255,255,255,0.12), transparent);
+      transform: rotate(25deg);
+      animation: shimmer 4s infinite;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(25deg); }
+      100% { transform: translateX(100%) rotate(25deg); }
+    }
+
+    .toast {
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-[#070b14] text-slate-100 min-h-screen font-body antialiased selection:bg-indigo-500 selection:text-white flex flex-col">
+
+  <!-- Background ambient glowing orbs -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+    <div class="absolute -top-40 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[140px]"></div>
+    <div class="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px]"></div>
+    <div class="absolute -bottom-40 left-1/3 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[140px]"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/20 flex items-center justify-center">
+          <div class="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
+            <i data-lucide="layers" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+        </div>
+        <div>
+          <span class="font-sans font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">NEXUS<span class="text-cyan-400">EXPO</span></span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] uppercase font-semibold tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">HQ Dashboard</span>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="flex-1 max-w-md hidden md:block">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Search conferences, cities, or tracks..." 
+            class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-700/60 rounded-xl text-sm placeholder-slate-400 text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+            oninput="handleSearch(this.value)"
+          />
+          <kbd class="hidden lg:inline-block absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-800 border border-slate-700 rounded">⌘K</kbd>
+        </div>
+      </div>
+
+      <!-- Action Items & Profile -->
+      <div class="flex items-center gap-3">
+        <!-- New Event Button -->
+        <button onclick="openAddEventModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-semibold text-xs tracking-wide shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Add Conference</span>
+          <span class="sm:hidden">Add</span>
+        </button>
+
+        <!-- Notification Bell -->
+        <button class="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-400 rounded-full ring-2 ring-[#070b14]"></span>
+        </button>
+
+        <!-- User Profile Avatar -->
+        <div class="flex items-center gap-2.5 pl-2 border-l border-slate-800">
+          <div class="w-8 h-8 rounded-full ring-2 ring-cyan-500/40 overflow-hidden bg-slate-800">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="w-full h-full object-cover">
+          </div>
+          <div class="hidden xl:block text-left">
+            <p class="text-xs font-semibold text-slate-200 leading-tight">Sarah Jenkins</p>
+            <p class="text-[10px] text-slate-400">Events Director</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    
+    <!-- Hero & Stats Header -->
+    <div class="mb-8">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-slate-800/80">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-950/80 text-cyan-400 border border-cyan-800/50">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              2026 - 2027 Season Active
+            </span>
+            <span class="text-xs text-slate-400">• Q3 & Q4 Portfolio</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-white tracking-tight">
+            Global Trade Shows & Conferences
+          </h1>
+          <p class="text-slate-400 text-sm mt-1.5 max-w-2xl">
+            Real-time management dashboard featuring keynote schedules, booth logistics, attendee analytics, and global expo registrations.
+          </p>
+        </div>
+
+        <!-- Quick Summary Metrics Counter -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 shrink-0">
+          <div class="glass-panel px-4 py-3 rounded-2xl border border-slate-800">
+            <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Active Expos</p>
+            <p id="metricTotalExpos" class="text-xl sm:text-2xl font-bold font-sans text-white mt-0.5 flex items-center gap-1.5">
+              9 <span id="metricNewBadge" class="text-[10px] font-normal text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded-md border border-emerald-800/40">Active</span>
+            </p>
+          </div>
+          <div class="glass-panel px-4 py-3 rounded-2xl border border-slate-800">
+            <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Total Reach</p>
+            <p id="metricTotalReach" class="text-xl sm:text-2xl font-bold font-sans text-cyan-300 mt-0.5">
+              93.5k <span class="text-[10px] font-normal text-slate-400">attendees</span>
+            </p>
+          </div>
+          <div class="glass-panel px-4 py-3 rounded-2xl border border-slate-800">
+            <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Hubs</p>
+            <p id="metricTotalCountries" class="text-xl sm:text-2xl font-bold font-sans text-purple-300 mt-0.5">
+              6 <span class="text-[10px] font-normal text-slate-400">cities</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Toolbar -->
+      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mt-6">
+        
+        <!-- Category Filter Pills -->
+        <div id="categoryFilterContainer" class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+          <!-- Dynamically populated categories -->
+        </div>
+
+        <!-- Sort & View Controls -->
+        <div class="flex items-center gap-3 shrink-0 self-end md:self-auto">
+          <div class="flex items-center gap-1.5 text-xs text-slate-400">
+            <i data-lucide="arrow-up-down" class="w-3.5 h-3.5"></i>
+            <span>Sort:</span>
+            <select id="sortSelect" onchange="handleSort(this.value)" class="bg-slate-900/90 border border-slate-800 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-cyan-500">
+              <option value="date-asc">Date: Upcoming First</option>
+              <option value="date-desc">Date: Furthest</option>
+              <option value="attendees-desc">Attendees: High to Low</option>
+              <option value="name-asc">Alphabetical (A-Z)</option>
+            </select>
+          </div>
+
+          <!-- View Mode Toggle: Grid Cards vs Table View -->
+          <div class="flex items-center bg-slate-900/90 border border-slate-800 rounded-xl p-1 gap-1">
+            <button onclick="setViewMode('grid')" id="gridBtn" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-medium transition-all" title="Card Grid View">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+              <span class="hidden sm:inline">Cards</span>
+            </button>
+            <button onclick="setViewMode('table')" id="tableBtn" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium transition-all" title="Table Spreadsheet View">
+              <i data-lucide="table-2" class="w-3.5 h-3.5"></i>
+              <span class="hidden sm:inline">Table</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 1. Card Grid View Container -->
+    <div id="eventsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+      <!-- Cards dynamically generated & rendered by JavaScript -->
+    </div>
+
+    <!-- 2. Table View Container -->
+    <div id="tableViewContainer" class="hidden">
+      <div class="glass-panel border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="bg-slate-900/90 text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-800 font-semibold">
+              <tr>
+                <th scope="col" class="px-6 py-4">Event & Category</th>
+                <th scope="col" class="px-6 py-4">Location & Venue</th>
+                <th scope="col" class="px-6 py-4">Timeline / Dates</th>
+                <th scope="col" class="px-6 py-4">Status</th>
+                <th scope="col" class="px-6 py-4 text-center">Metrics</th>
+                <th scope="col" class="px-6 py-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-slate-800/60">
+              <!-- Dynamically populated table rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty Search / Filter State -->
+    <div id="emptyState" class="hidden text-center py-20">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 mb-4">
+        <i data-lucide="calendar-x" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-lg font-semibold text-slate-200 font-sans">No conferences match your criteria</h3>
+      <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Try clearing your search query or selecting another category filter.</p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-xl text-xs font-semibold transition-colors">
+        Reset All Filters
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Add New Conference Modal -->
+  <div id="addEventModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div id="addModalContent" class="glass-panel border border-slate-700/80 rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto transform scale-95 transition-transform duration-300 shadow-2xl relative p-6 sm:p-8">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-5 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold font-sans text-white">Add New Conference / Expo</h3>
+            <p class="text-xs text-slate-400">Publish a new trade show card to your active management dashboard</p>
+          </div>
+        </div>
+        <button onclick="closeAddModal()" class="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Add Event Form -->
+      <form id="addEventForm" onsubmit="handleCreateEvent(event)" class="mt-6 space-y-5">
+        
+        <!-- Event Name -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+            Event Name <span class="text-rose-400">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="newEventTitle" 
+            required 
+            placeholder="e.g. Quantum Computing Expo 2027" 
+            class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+          />
+        </div>
+
+        <!-- Category & Status in 2 cols -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Category <span class="text-rose-400">*</span>
+            </label>
+            <select id="newEventCategory" required class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+              <option value="AI & Robotics">🤖 AI & Robotics</option>
+              <option value="FinTech">💳 FinTech</option>
+              <option value="Healthcare">🧬 Healthcare</option>
+              <option value="Mobility">⚡ Mobility</option>
+              <option value="Sustainability">🌱 Sustainability</option>
+              <option value="Cloud & DevOps">☁️ Cloud & DevOps</option>
+              <option value="Cybersecurity">🛡️ Cybersecurity</option>
+              <option value="Design & UX">🎨 Design & UX</option>
+              <option value="Aerospace">🚀 Aerospace</option>
+              <option value="Quantum Tech">⚛️ Quantum Tech</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Registration Status
+            </label>
+            <select id="newEventStatus" class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+              <option value="Registration Open">Registration Open</option>
+              <option value="Early Bird Tier">Early Bird Tier</option>
+              <option value="Selling Fast">Selling Fast</option>
+              <option value="Keynote Announced">Keynote Announced</option>
+              <option value="Call for Papers">Call for Papers</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Venue & City Location in 2 cols -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Full Venue & Address <span class="text-rose-400">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="newEventLocation" 
+              required 
+              placeholder="e.g. Jacob K. Javits Center, New York, NY" 
+              class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              City, Region / Country <span class="text-rose-400">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="newEventShortLocation" 
+              required 
+              placeholder="e.g. New York, NY" 
+              class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+        </div>
+
+        <!-- Date Range in 2 cols -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Date Display String <span class="text-rose-400">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="newEventDates" 
+              required 
+              placeholder="e.g. Apr 14 - 17, 2027" 
+              class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Start Date (for sorting) <span class="text-rose-400">*</span>
+            </label>
+            <input 
+              type="date" 
+              id="newEventStartDate" 
+              required 
+              value="2027-04-14"
+              class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+        </div>
+
+        <!-- Photographic Background Image URL + Presets -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-300">
+              Photographic Background Image URL <span class="text-rose-400">*</span>
+            </label>
+            <span class="text-[11px] text-slate-400">Pick preset or paste custom link</span>
+          </div>
+          <input 
+            type="url" 
+            id="newEventImage" 
+            required 
+            value="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80"
+            placeholder="https://images.unsplash.com/..." 
+            class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+          />
+          <!-- Quick Preset Image Buttons -->
+          <div class="flex items-center gap-2 mt-2 overflow-x-auto pb-1 text-xs">
+            <span class="text-slate-400 text-[11px] shrink-0">Presets:</span>
+            <button type="button" onclick="selectImagePreset('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] whitespace-nowrap">High-Tech Stage</button>
+            <button type="button" onclick="selectImagePreset('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] whitespace-nowrap">Grand Auditorium</button>
+            <button type="button" onclick="selectImagePreset('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=80')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] whitespace-nowrap">Expo Amphitheater</button>
+            <button type="button" onclick="selectImagePreset('https://images.unsplash.com/photo-1517976487507-580da3a82381?auto=format&fit=crop&w=1200&q=80')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] whitespace-nowrap">Aerospace Hangar</button>
+          </div>
+        </div>
+
+        <!-- Metrics: Attendees, Speakers, Booths in 3 cols -->
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Attendees
+            </label>
+            <input 
+              type="number" 
+              id="newEventAttendees" 
+              required 
+              value="8500" 
+              min="100" 
+              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Speakers
+            </label>
+            <input 
+              type="number" 
+              id="newEventSpeakers" 
+              required 
+              value="85" 
+              min="1" 
+              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              Booths
+            </label>
+            <input 
+              type="number" 
+              id="newEventBooths" 
+              required 
+              value="180" 
+              min="1" 
+              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+        </div>
+
+        <!-- Overview / Description -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+            Executive Summary / Overview
+          </label>
+          <textarea 
+            id="newEventDescription" 
+            rows="2" 
+            required 
+            placeholder="Key theme, attendees target, and breakthrough technologies covered..." 
+            class="w-full px-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+          ></textarea>
+        </div>
+
+        <!-- Tracks / Tags -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+            Featured Tracks (comma-separated)
+          </label>
+          <input 
+            type="text" 
+            id="newEventTracks" 
+            placeholder="Quantum Algorithms, Superconductors, Cryogenics, Enterprise Scale" 
+            class="w-full px-4 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+          />
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <button type="button" onclick="closeAddModal()" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+            Cancel
+          </button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs tracking-wide shadow-lg shadow-cyan-500/25 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+            Publish Conference Card
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="eventModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div id="modalContent" class="glass-panel border border-slate-700/80 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 shadow-2xl relative">
+      <!-- Modal Header Image -->
+      <div class="relative h-60 w-full overflow-hidden rounded-t-3xl">
+        <img id="modalImage" src="" alt="Event banner" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#090e1a] via-[#090e1a]/50 to-transparent"></div>
+        <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md border border-white/10 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="absolute top-4 left-4">
+          <span id="modalBadge" class="glass-badge px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-md">
+          </span>
+        </div>
+        <div class="absolute bottom-4 left-6 right-6">
+          <span id="modalStatus" class="inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md mb-1.5"></span>
+          <h2 id="modalTitle" class="text-2xl sm:text-3xl font-bold font-sans text-white leading-tight"></h2>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 sm:p-8 space-y-6">
+        <!-- Date & Location highlight -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <i data-lucide="calendar" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Conference Dates</p>
+              <p id="modalDates" class="text-sm font-semibold text-slate-100"></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <i data-lucide="map-pin" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Venue & City</p>
+              <p id="modalLocation" class="text-sm font-semibold text-slate-100"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2">Executive Overview</h4>
+          <p id="modalDescription" class="text-sm text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <!-- Stats Bar in Modal -->
+        <div class="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-center">
+          <div>
+            <p class="text-xs text-slate-400">Expected Guests</p>
+            <p id="modalAttendees" class="text-base sm:text-lg font-bold font-sans text-cyan-400 mt-0.5"></p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Keynote Speakers</p>
+            <p id="modalSpeakers" class="text-base sm:text-lg font-bold font-sans text-purple-400 mt-0.5"></p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Exhibitor Booths</p>
+            <p id="modalBooths" class="text-base sm:text-lg font-bold font-sans text-emerald-400 mt-0.5"></p>
+          </div>
+        </div>
+
+        <!-- Tracks / Topics -->
+        <div>
+          <h4 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2.5">Key Featured Tracks</h4>
+          <div id="modalTracks" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-800 gap-3">
+          <button onclick="toggleBookmarkModal()" id="modalBookmarkBtn" class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-200 text-xs font-semibold transition-colors">
+            <i data-lucide="bookmark" class="w-4 h-4"></i>
+            <span id="modalBookmarkText">Save to Watchlist</span>
+          </button>
+          
+          <div class="flex items-center gap-2">
+            <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+              Dismiss
+            </button>
+            <button onclick="registerEvent()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-cyan-500/25 transition-transform hover:scale-[1.02]">
+              Manage Registration
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toastNotification" class="toast fixed bottom-6 right-6 z-50 glass-panel border border-cyan-500/40 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+      <i data-lucide="check" class="w-4 h-4"></i>
+    </div>
+    <div>
+      <p id="toastTitle" class="text-xs font-bold text-white">Action Completed</p>
+      <p id="toastMessage" class="text-[11px] text-slate-400">Conference updated successfully.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-slate-800/80 glass-panel py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© 2026 NexusEvents Operations Dashboard. High-Performance Conference Management.</p>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span class="inline-flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> SOC2 Certified</span>
+        <span>•</span>
+        <span class="inline-flex items-center gap-1"><i data-lucide="radio" class="w-3.5 h-3.5 text-cyan-400 animate-pulse"></i> Live Sync v3.8</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Logic & Data -->
+  <script>
+    // Initial 9 Curated Trade Show / Conference Data Models
+    let conferences = [
+      {
+        id: 1,
+        title: "Global AI & Robotics Summit 2026",
+        category: "AI & Robotics",
+        categoryIcon: "cpu",
+        badgeGradient: "from-purple-500/20 to-indigo-500/20 text-purple-300 border-purple-500/40",
+        badgeGlow: "shadow-purple-500/20",
+        location: "Moscone Center, San Francisco, CA",
+        shortLocation: "San Francisco, CA",
+        country: "USA",
+        dates: "Oct 14 - 17, 2026",
+        startDate: "2026-10-14",
+        attendees: 14500,
+        attendeesDisplay: "14.5k",
+        speakers: 140,
+        booths: 320,
+        status: "Registration Open",
+        statusColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
+        description: "The world's premier forum on Autonomous Systems, Frontier LLMs, Embodied AI, and Humanoid Robotics. Gathering top laboratory researchers, enterprise pioneers, and hardware developers under one roof.",
+        tracks: ["Frontier Models", "Humanoid Robotics", "Edge TPU Acceleration", "AI Ethics & Safety", "Neural Synthesis"],
+        bookmarked: true
+      },
+      {
+        id: 2,
+        title: "FinTech Disrupt World Congress",
+        category: "FinTech",
+        categoryIcon: "coins",
+        badgeGradient: "from-emerald-500/20 to-teal-500/20 text-emerald-300 border-emerald-500/40",
+        badgeGlow: "shadow-emerald-500/20",
+        location: "ExCeL London, London, United Kingdom",
+        shortLocation: "London, UK",
+        country: "UK",
+        dates: "Nov 04 - 07, 2026",
+        startDate: "2026-11-04",
+        attendees: 11200,
+        attendeesDisplay: "11.2k",
+        speakers: 95,
+        booths: 240,
+        status: "Early Bird Tier",
+        statusColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40",
+        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80",
+        description: "Unlocking the next wave of Cross-Border Settlement, Decentralized Capital Markets, Algorithmic Risk, and Autonomous Banking infrastructure.",
+        tracks: ["CBDCs & Stablecoins", "Algorithmic Trading", "AI Compliance", "Embedded Finance", "Quantum Cryptography"],
+        bookmarked: false
+      },
+      {
+        id: 3,
+        title: "BioHealth & MedTech International",
+        category: "Healthcare",
+        categoryIcon: "activity",
+        badgeGradient: "from-rose-500/20 to-pink-500/20 text-rose-300 border-rose-500/40",
+        badgeGlow: "shadow-rose-500/20",
+        location: "BCEC, Boston, Massachusetts",
+        shortLocation: "Boston, MA",
+        country: "USA",
+        dates: "Nov 18 - 20, 2026",
+        startDate: "2026-11-18",
+        attendees: 9800,
+        attendeesDisplay: "9.8k",
+        speakers: 110,
+        booths: 280,
+        status: "Keynote Announced",
+        statusColor: "bg-purple-500/20 text-purple-300 border-purple-500/40",
+        image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=1200&q=80",
+        description: "Accelerating clinical breakthroughs in CRISPR therapeutics, AI-generated oncology drugs, robotic micro-surgery, and next-gen biometric diagnostic wearables.",
+        tracks: ["CRISPR Engineering", "Computational Drug Discovery", "Surgical Robotics", "Precision Genomics", "Digital Health"],
+        bookmarked: false
+      },
+      {
+        id: 4,
+        title: "NextGen Auto & Electric Mobility Expo",
+        category: "Mobility",
+        categoryIcon: "zap",
+        badgeGradient: "from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40",
+        badgeGlow: "shadow-amber-500/20",
+        location: "Messe München, Munich, Germany",
+        shortLocation: "Munich, Germany",
+        country: "Germany",
+        dates: "Dec 01 - 04, 2026",
+        startDate: "2026-12-01",
+        attendees: 18500,
+        attendeesDisplay: "18.5k",
+        speakers: 160,
+        booths: 410,
+        status: "Selling Fast",
+        statusColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+        image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80",
+        description: "Europe's most influential automotive trade show showcasing Solid-State Battery tech, Autonomous Level 4 fleet platforms, and ultra-fast Megawatt charging infrastructure.",
+        tracks: ["Solid-State Batteries", "Autonomous Fleet Vision", "eVTOL Urban Aircraft", "Vehicle-to-Grid (V2G)", "Software-Defined Vehicles"],
+        bookmarked: true
+      },
+      {
+        id: 5,
+        title: "CleanEnergy & Climate Solutions Expo",
+        category: "Sustainability",
+        categoryIcon: "leaf",
+        badgeGradient: "from-teal-500/20 to-emerald-500/20 text-teal-300 border-teal-500/40",
+        badgeGlow: "shadow-teal-500/20",
+        location: "Bella Center, Copenhagen, Denmark",
+        shortLocation: "Copenhagen, Denmark",
+        country: "Denmark",
+        dates: "Jan 12 - 15, 2027",
+        startDate: "2027-01-12",
+        attendees: 8400,
+        attendeesDisplay: "8.4k",
+        speakers: 85,
+        booths: 195,
+        status: "Call for Papers",
+        statusColor: "bg-blue-500/20 text-blue-300 border-blue-500/40",
+        image: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1200&q=80",
+        description: "Uniting clean tech founders, sovereign climate funds, and grid operators to scale direct air capture, offshore wind megastructures, and fusion power prototypes.",
+        tracks: ["Grid Scale Energy Storage", "Green Hydrogen", "Direct Air Capture", "Fusion Commercialization", "Circular Supply Chains"],
+        bookmarked: false
+      },
+      {
+        id: 6,
+        title: "CloudScale & DevOps Architecture Expo",
+        category: "Cloud & DevOps",
+        categoryIcon: "server",
+        badgeGradient: "from-sky-500/20 to-blue-500/20 text-sky-300 border-sky-500/40",
+        badgeGlow: "shadow-sky-500/20",
+        location: "Seattle Convention Center, Seattle, WA",
+        shortLocation: "Seattle, WA",
+        country: "USA",
+        dates: "Jan 26 - 29, 2027",
+        startDate: "2027-01-26",
+        attendees: 12800,
+        attendeesDisplay: "12.8k",
+        speakers: 135,
+        booths: 310,
+        status: "Registration Open",
+        statusColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+        image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=80",
+        description: "The global gathering for Site Reliability Engineers, Kubernetes architects, Platform engineers, and Distributed Systems innovators.",
+        tracks: ["Kubernetes Multi-Cluster", "eBPF Observability", "Zero-Trust Mesh", "Serverless at Scale", "FinOps & Cost Optimization"],
+        bookmarked: true
+      },
+      {
+        id: 7,
+        title: "CyberShield Global Defense Forum",
+        category: "Cybersecurity",
+        categoryIcon: "shield-alert",
+        badgeGradient: "from-red-500/20 to-violet-500/20 text-red-300 border-red-500/40",
+        badgeGlow: "shadow-red-500/20",
+        location: "Marina Bay Sands Expo, Singapore",
+        shortLocation: "Singapore",
+        country: "Singapore",
+        dates: "Feb 10 - 13, 2027",
+        startDate: "2027-02-10",
+        attendees: 7200,
+        attendeesDisplay: "7.2k",
+        speakers: 80,
+        booths: 170,
+        status: "Keynote Announced",
+        statusColor: "bg-purple-500/20 text-purple-300 border-purple-500/40",
+        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
+        description: "Intelligence officers, CISOs, and ethical red teams meet to counter nation-state cyber threats, quantum decryption, and AI-driven social engineering vectors.",
+        tracks: ["Post-Quantum Encryption", "Offensive AI Defense", "SCADA & Critical Infra", "Zero-Day Response", "Cloud Security Posture"],
+        bookmarked: false
+      },
+      {
+        id: 8,
+        title: "DesignOps & Creative Frontiers Summit",
+        category: "Design & UX",
+        categoryIcon: "palette",
+        badgeGradient: "from-fuchsia-500/20 to-pink-500/20 text-fuchsia-300 border-fuchsia-500/40",
+        badgeGlow: "shadow-fuchsia-500/20",
+        location: "RAI Amsterdam, Amsterdam, Netherlands",
+        shortLocation: "Amsterdam, NL",
+        country: "Netherlands",
+        dates: "Mar 03 - 06, 2027",
+        startDate: "2027-03-03",
+        attendees: 6100,
+        attendeesDisplay: "6.1k",
+        speakers: 70,
+        booths: 140,
+        status: "Early Bird Tier",
+        statusColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40",
+        image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80",
+        description: "Exploring Spatial UX for XR hardware, generative UI design systems, brand synthesis, and human-centered design in the age of autonomous agents.",
+        tracks: ["Spatial UI for VisionOS", "Generative Design Tokens", "Design System Governance", "Micro-Interactions", "Inclusive UX"],
+        bookmarked: false
+      },
+      {
+        id: 9,
+        title: "SpaceTech & Commercial Aerospace Expo",
+        category: "Aerospace",
+        categoryIcon: "rocket",
+        badgeGradient: "from-blue-500/20 to-indigo-500/20 text-sky-300 border-sky-500/40",
+        badgeGlow: "shadow-sky-500/20",
+        location: "George R. Brown Center, Houston, Texas",
+        shortLocation: "Houston, TX",
+        country: "USA",
+        dates: "Mar 22 - 25, 2027",
+        startDate: "2027-03-22",
+        attendees: 15000,
+        attendeesDisplay: "15.0k",
+        speakers: 125,
+        booths: 340,
+        status: "Selling Fast",
+        statusColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+        image: "https://images.unsplash.com/photo-1517976487507-580da3a82381?auto=format&fit=crop&w=1200&q=80",
+        description: "The premier gathering for commercial spaceflight, orbital habitat manufacturing, lunar logistics, and satellite mega-constellations.",
+        tracks: ["Heavy Lift Rocketry", "Orbital Manufacturing", "Lunar Base Infrastructure", "Satellite Mesh Networks", "Space Situational Awareness"],
+        bookmarked: true
+      }
+    ];
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentSort = 'date-asc';
+    let currentViewMode = 'grid'; // 'grid' or 'table'
+    let currentActiveModalId = null;
+
+    // Category Styling Dictionary
+    const categoryConfig = {
+      'AI & Robotics': { icon: 'cpu', emoji: '🤖', gradient: 'from-purple-500/20 to-indigo-500/20 text-purple-300 border-purple-500/40', glow: 'shadow-purple-500/20' },
+      'FinTech': { icon: 'coins', emoji: '💳', gradient: 'from-emerald-500/20 to-teal-500/20 text-emerald-300 border-emerald-500/40', glow: 'shadow-emerald-500/20' },
+      'Healthcare': { icon: 'activity', emoji: '🧬', gradient: 'from-rose-500/20 to-pink-500/20 text-rose-300 border-rose-500/40', glow: 'shadow-rose-500/20' },
+      'Mobility': { icon: 'zap', emoji: '⚡', gradient: 'from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40', glow: 'shadow-amber-500/20' },
+      'Sustainability': { icon: 'leaf', emoji: '🌱', gradient: 'from-teal-500/20 to-emerald-500/20 text-teal-300 border-teal-500/40', glow: 'shadow-teal-500/20' },
+      'Cloud & DevOps': { icon: 'server', emoji: '☁️', gradient: 'from-sky-500/20 to-blue-500/20 text-sky-300 border-sky-500/40', glow: 'shadow-sky-500/20' },
+      'Cybersecurity': { icon: 'shield-alert', emoji: '🛡️', gradient: 'from-red-500/20 to-violet-500/20 text-red-300 border-red-500/40', glow: 'shadow-red-500/20' },
+      'Design & UX': { icon: 'palette', emoji: '🎨', gradient: 'from-fuchsia-500/20 to-pink-500/20 text-fuchsia-300 border-fuchsia-500/40', glow: 'shadow-fuchsia-500/20' },
+      'Aerospace': { icon: 'rocket', emoji: '🚀', gradient: 'from-blue-500/20 to-indigo-500/20 text-sky-300 border-sky-500/40', glow: 'shadow-sky-500/20' },
+      'Quantum Tech': { icon: 'atom', emoji: '⚛️', gradient: 'from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/40', glow: 'shadow-cyan-500/20' }
+    };
+
+    const statusConfig = {
+      'Registration Open': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+      'Early Bird Tier': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+      'Selling Fast': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+      'Keynote Announced': 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+      'Call for Papers': 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+    };
+
+    // Update Header Metric KPIs
+    function updateMetrics() {
+      const totalAttendees = conferences.reduce((sum, c) => sum + (c.attendees || 0), 0);
+      const uniqueCities = new Set(conferences.map(c => c.shortLocation || c.location)).size;
+
+      document.getElementById('metricTotalExpos').innerHTML = `${conferences.length} <span class="text-[10px] font-normal text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded-md border border-emerald-800/40">Active</span>`;
+      document.getElementById('metricTotalReach').innerHTML = `${(totalAttendees / 1000).toFixed(1)}k <span class="text-[10px] font-normal text-slate-400">attendees</span>`;
+      document.getElementById('metricTotalCountries').innerHTML = `${uniqueCities} <span class="text-[10px] font-normal text-slate-400">cities</span>`;
+    }
+
+    // Render Filter Buttons dynamically
+    function renderCategoryFilters() {
+      const filterContainer = document.getElementById('categoryFilterContainer');
+      const uniqueCats = ['all', ...Array.from(new Set(conferences.map(c => c.category)))];
+
+      filterContainer.innerHTML = uniqueCats.map(cat => {
+        const isActive = currentCategory === cat;
+        const count = cat === 'all' ? conferences.length : conferences.filter(c => c.category === cat).length;
+        const cfg = categoryConfig[cat];
+        const label = cat === 'all' ? `All Conferences (${count})` : `${cfg ? cfg.emoji : '🏷️'} ${cat} (${count})`;
+        
+        return `
+          <button 
+            onclick="filterCategory('${cat}', this)" 
+            class="category-btn px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all ${
+              isActive 
+                ? 'active font-semibold bg-cyan-500 text-white shadow-md shadow-cyan-500/25' 
+                : 'font-medium bg-slate-900/90 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white'
+            }"
+          >
+            ${label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Get current filtered and sorted data
+    function getProcessedData() {
+      let filtered = conferences.filter(conf => {
+        const matchesCategory = currentCategory === 'all' || conf.category === currentCategory;
+        const matchesSearch = searchQuery === '' || 
+          conf.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          conf.shortLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          conf.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          conf.category.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      filtered.sort((a, b) => {
+        if (currentSort === 'date-asc') return new Date(a.startDate) - new Date(b.startDate);
+        if (currentSort === 'date-desc') return new Date(b.startDate) - new Date(a.startDate);
+        if (currentSort === 'attendees-desc') return b.attendees - a.attendees;
+        if (currentSort === 'name-asc') return a.title.localeCompare(b.title);
+        return 0;
+      });
+
+      return filtered;
+    }
+
+    // Main Render Function (Cards & Table)
+    function render() {
+      const data = getProcessedData();
+      const emptyState = document.getElementById('emptyState');
+      const cardsContainer = document.getElementById('eventsContainer');
+      const tableContainer = document.getElementById('tableViewContainer');
+      const tableBody = document.getElementById('tableBody');
+
+      updateMetrics();
+
+      if (data.length === 0) {
+        cardsContainer.innerHTML = '';
+        tableBody.innerHTML = '';
+        cardsContainer.classList.add('hidden');
+        tableContainer.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        lucide.createIcons();
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      if (currentViewMode === 'grid') {
+        cardsContainer.classList.remove('hidden');
+        tableContainer.classList.add('hidden');
+        renderCardsView(data);
+      } else {
+        cardsContainer.classList.add('hidden');
+        tableContainer.classList.remove('hidden');
+        renderTableView(data);
+      }
+
+      lucide.createIcons();
+    }
+
+    // Render 9+ Cards Grid
+    function renderCardsView(data) {
+      const container = document.getElementById('eventsContainer');
+      container.innerHTML = data.map(conf => `
+        <div class="event-card group relative h-[440px] sm:h-[460px] rounded-3xl overflow-hidden cursor-pointer border border-slate-700/60 hover:border-cyan-500/60 shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card-hover" onclick="openModal(${conf.id})">
+          
+          <!-- Background Photographic Image with Zoom Effect -->
+          <div class="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
+            <img 
+              src="${conf.image}" 
+              alt="${conf.title}" 
+              class="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-110"
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Multi-stage Dark Gradient Overlays for High Legibility -->
+          <div class="absolute inset-0 card-top-vignette pointer-events-none"></div>
+          <div class="absolute inset-0 card-gradient-overlay pointer-events-none"></div>
+
+          <!-- Top Action Bar: Category Badge & Bookmark -->
+          <div class="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
+            <!-- Category Badge with Glassmorphism -->
+            <div class="glass-badge badge-shimmer px-3 py-1.5 rounded-full border ${conf.badgeGradient || 'from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/40'} flex items-center gap-1.5 shadow-lg ${conf.badgeGlow || 'shadow-cyan-500/20'}">
+              <i data-lucide="${conf.categoryIcon || 'tag'}" class="w-3.5 h-3.5"></i>
+              <span class="text-xs font-bold tracking-wide">${conf.category}</span>
+            </div>
+
+            <!-- Bookmark & Delete Buttons -->
+            <div class="flex items-center gap-1.5">
+              <button 
+                onclick="event.stopPropagation(); deleteEvent(${conf.id})" 
+                class="w-8 h-8 rounded-full glass-badge flex items-center justify-center text-slate-400 hover:text-rose-400 hover:scale-110 active:scale-95 transition-all opacity-0 group-hover:opacity-100"
+                title="Remove Conference"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+              <button 
+                onclick="event.stopPropagation(); toggleBookmark(${conf.id})" 
+                class="w-8 h-8 rounded-full glass-badge flex items-center justify-center text-slate-300 hover:text-cyan-400 hover:scale-110 active:scale-95 transition-all"
+                title="${conf.bookmarked ? 'Remove Bookmark' : 'Bookmark Conference'}"
+              >
+                <i data-lucide="bookmark" class="w-4 h-4 ${conf.bookmarked ? 'fill-cyan-400 text-cyan-400' : ''}"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card Body / Content (Anchored to Bottom) -->
+          <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6 z-10 flex flex-col justify-end">
+            
+            <!-- Status Pill -->
+            <div class="mb-2.5 flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${conf.statusColor || 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'} backdrop-blur-md">
+                ${conf.status}
+              </span>
+              <span class="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                <i data-lucide="users" class="w-3 h-3 text-cyan-400"></i>
+                ${conf.attendeesDisplay || conf.attendees.toLocaleString()} Attending
+              </span>
+            </div>
+
+            <!-- Event Title with Glow on Hover -->
+            <h3 class="text-xl sm:text-2xl font-bold font-sans text-white tracking-tight leading-snug group-hover:text-cyan-300 transition-colors line-clamp-2">
+              ${conf.title}
+            </h3>
+
+            <!-- Location & Dates -->
+            <div class="mt-3.5 space-y-1.5 text-xs text-slate-300 font-medium">
+              <div class="flex items-center gap-2 text-slate-200">
+                <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                <span class="truncate">${conf.location}</span>
+              </div>
+              <div class="flex items-center gap-2 text-slate-300">
+                <i data-lucide="calendar" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span>${conf.dates}</span>
+              </div>
+            </div>
+
+            <!-- Hover Revealing Drawer (Speakers, Booths & Action CTA) -->
+            <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-3 text-slate-400">
+                <span class="flex items-center gap-1">
+                  <strong class="text-slate-200 font-sans">${conf.speakers}</strong> Speakers
+                </span>
+                <span>•</span>
+                <span class="flex items-center gap-1">
+                  <strong class="text-slate-200 font-sans">${conf.booths}</strong> Booths
+                </span>
+              </div>
+              <div class="inline-flex items-center gap-1 text-cyan-400 font-semibold group-hover:translate-x-1 transition-transform">
+                <span>Details</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Subtle Border Hover Glow Ring -->
+          <div class="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-cyan-400/40 pointer-events-none transition-colors duration-300"></div>
+        </div>
+      `).join('');
+    }
+
+    // Render Spreadsheet Table View
+    function renderTableView(data) {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = data.map(conf => `
+        <tr class="hover:bg-slate-800/40 transition-colors group cursor-pointer" onclick="openModal(${conf.id})">
+          
+          <!-- Event & Thumbnail -->
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3.5">
+              <div class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-slate-700/80 bg-slate-900 shadow-md">
+                <img src="${conf.image}" alt="${conf.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+              </div>
+              <div>
+                <h4 class="font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">${conf.title}</h4>
+                <div class="mt-1 flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full border ${conf.badgeGradient}">
+                    <i data-lucide="${conf.categoryIcon || 'tag'}" class="w-3 h-3"></i>
+                    ${conf.category}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <!-- Location -->
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-2 text-slate-300">
+              <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+              <div>
+                <p class="font-medium text-slate-200 text-xs">${conf.shortLocation}</p>
+                <p class="text-[11px] text-slate-400 line-clamp-1">${conf.location}</p>
+              </div>
+            </div>
+          </td>
+
+          <!-- Timeline -->
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-2 text-slate-300">
+              <i data-lucide="calendar" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+              <span class="text-xs font-medium text-slate-200">${conf.dates}</span>
+            </div>
+          </td>
+
+          <!-- Status -->
+          <td class="px-6 py-4">
+            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider border ${conf.statusColor}">
+              ${conf.status}
+            </span>
+          </td>
+
+          <!-- Metrics -->
+          <td class="px-6 py-4 text-center">
+            <div class="inline-flex items-center gap-3 text-xs bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-xl">
+              <span title="Expected Attendees" class="flex items-center gap-1 font-semibold text-cyan-400">
+                <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                ${conf.attendeesDisplay || conf.attendees.toLocaleString()}
+              </span>
+              <span class="text-slate-700">|</span>
+              <span title="Speakers" class="text-purple-300 font-semibold">${conf.speakers} <span class="text-[10px] font-normal text-slate-400">spk</span></span>
+              <span class="text-slate-700">|</span>
+              <span title="Booths" class="text-emerald-400 font-semibold">${conf.booths} <span class="text-[10px] font-normal text-slate-400">bth</span></span>
+            </div>
+          </td>
+
+          <!-- Actions -->
+          <td class="px-6 py-4 text-right" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-end gap-2">
+              <button 
+                onclick="toggleBookmark(${conf.id})" 
+                class="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-slate-800 transition-colors"
+                title="${conf.bookmarked ? 'Remove Bookmark' : 'Bookmark Conference'}"
+              >
+                <i data-lucide="bookmark" class="w-4 h-4 ${conf.bookmarked ? 'fill-cyan-400 text-cyan-400' : ''}"></i>
+              </button>
+              <button 
+                onclick="openModal(${conf.id})" 
+                class="p-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-colors"
+                title="View Full Details"
+              >
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+              <button 
+                onclick="deleteEvent(${conf.id})" 
+                class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors"
+                title="Delete Conference"
+              >
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </td>
+
+        </tr>
+      `).join('');
+    }
+
+    // Filter by Category
+    function filterCategory(cat, btnElement) {
+      currentCategory = cat;
+      renderCategoryFilters();
+      render();
+    }
+
+    // Search Handler
+    function handleSearch(val) {
+      searchQuery = val.trim();
+      render();
+    }
+
+    // Sort Handler
+    function handleSort(sortKey) {
+      currentSort = sortKey;
+      render();
+    }
+
+    // View Mode Switcher: Cards vs Table
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const gridBtn = document.getElementById('gridBtn');
+      const tableBtn = document.getElementById('tableBtn');
+
+      if (mode === 'grid') {
+        gridBtn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-medium transition-all';
+        tableBtn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium transition-all';
+      } else {
+        gridBtn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium transition-all';
+        tableBtn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-medium transition-all';
+      }
+
+      render();
+    }
+
+    // Reset Filters
+    function resetFilters() {
+      searchQuery = '';
+      currentCategory = 'all';
+      document.getElementById('searchInput').value = '';
+      renderCategoryFilters();
+      render();
+    }
+
+    // Bookmark Toggle
+    function toggleBookmark(id) {
+      const conf = conferences.find(c => c.id === id);
+      if (conf) {
+        conf.bookmarked = !conf.bookmarked;
+        render();
+        showToast(conf.bookmarked ? 'Saved to Watchlist' : 'Removed from Watchlist', conf.title);
+      }
+    }
+
+    // Delete Event
+    function deleteEvent(id) {
+      const conf = conferences.find(c => c.id === id);
+      if (!conf) return;
+      if (confirm(`Are you sure you want to remove "${conf.title}" from the dashboard?`)) {
+        conferences = conferences.filter(c => c.id !== id);
+        renderCategoryFilters();
+        render();
+        showToast('Conference Removed', `${conf.title} was deleted.`);
+      }
+    }
+
+    // Add Conference Modal Controls
+    function openAddEventModal() {
+      const modal = document.getElementById('addEventModal');
+      const content = document.getElementById('addModalContent');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      document.getElementById('newEventTitle').focus();
+    }
+
+    function closeAddModal() {
+      const modal = document.getElementById('addEventModal');
+      const content = document.getElementById('addModalContent');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      document.getElementById('addEventForm').reset();
+    }
+
+    function selectImagePreset(url) {
+      document.getElementById('newEventImage').value = url;
+    }
+
+    // Handle Create Event Form Submission
+    function handleCreateEvent(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('newEventTitle').value.trim();
+      const category = document.getElementById('newEventCategory').value;
+      const status = document.getElementById('newEventStatus').value;
+      const location = document.getElementById('newEventLocation').value.trim();
+      const shortLocation = document.getElementById('newEventShortLocation').value.trim();
+      const dates = document.getElementById('newEventDates').value.trim();
+      const startDate = document.getElementById('newEventStartDate').value;
+      const image = document.getElementById('newEventImage').value.trim();
+      const attendees = parseInt(document.getElementById('newEventAttendees').value, 10) || 5000;
+      const speakers = parseInt(document.getElementById('newEventSpeakers').value, 10) || 50;
+      const booths = parseInt(document.getElementById('newEventBooths').value, 10) || 100;
+      const description = document.getElementById('newEventDescription').value.trim();
+      const tracksRaw = document.getElementById('newEventTracks').value.trim();
+
+      const tracks = tracksRaw 
+        ? tracksRaw.split(',').map(t => t.trim()).filter(Boolean)
+        : ["Keynote Address", "Breakout Sessions", "Expo Floor", "Networking"];
+
+      const catStyle = categoryConfig[category] || {
+        icon: 'tag',
+        emoji: '🏷️',
+        gradient: 'from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/40',
+        glow: 'shadow-cyan-500/20'
+      };
+
+      const newEvent = {
+        id: Date.now(),
+        title,
+        category,
+        categoryIcon: catStyle.icon,
+        badgeGradient: catStyle.gradient,
+        badgeGlow: catStyle.glow,
+        location,
+        shortLocation,
+        country: shortLocation.split(',').pop()?.trim() || 'Global',
+        dates,
+        startDate,
+        attendees,
+        attendeesDisplay: attendees >= 1000 ? `${(attendees / 1000).toFixed(1)}k` : attendees.toString(),
+        speakers,
+        booths,
+        status,
+        statusColor: statusConfig[status] || 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+        image,
+        description,
+        tracks,
+        bookmarked: false
+      };
+
+      // Add to front of conferences list
+      conferences.unshift(newEvent);
+
+      closeAddModal();
+      renderCategoryFilters();
+      render();
+      showToast('Conference Published 🎉', `${title} is now active on your dashboard.`);
+    }
+
+    // Modal Details View
+    function openModal(id) {
+      const conf = conferences.find(c => c.id === id);
+      if (!conf) return;
+      currentActiveModalId = id;
+
+      document.getElementById('modalImage').src = conf.image;
+      document.getElementById('modalTitle').textContent = conf.title;
+      document.getElementById('modalDates').textContent = conf.dates;
+      document.getElementById('modalLocation').textContent = conf.location;
+      document.getElementById('modalDescription').textContent = conf.description;
+      document.getElementById('modalAttendees').textContent = conf.attendees.toLocaleString();
+      document.getElementById('modalSpeakers').textContent = conf.speakers;
+      document.getElementById('modalBooths').textContent = conf.booths;
+      
+      const badge = document.getElementById('modalBadge');
+      badge.className = `glass-badge px-3 py-1.5 rounded-full border ${conf.badgeGradient || 'from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/40'} flex items-center gap-1.5 shadow-md`;
+      badge.innerHTML = `<i data-lucide="${conf.categoryIcon || 'tag'}" class="w-3.5 h-3.5"></i> <span>${conf.category}</span>`;
+
+      const status = document.getElementById('modalStatus');
+      status.className = `inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md border ${conf.statusColor || 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'} backdrop-blur-md`;
+      status.textContent = conf.status;
+
+      const tracksContainer = document.getElementById('modalTracks');
+      tracksContainer.innerHTML = conf.tracks.map(t => `
+        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700/80 text-xs font-medium text-slate-300">
+          #${t}
+        </span>
+      `).join('');
+
+      updateModalBookmarkUI(conf.bookmarked);
+
+      const modal = document.getElementById('eventModal');
+      const content = document.getElementById('modalContent');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      
+      lucide.createIcons();
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('eventModal');
+      const content = document.getElementById('modalContent');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+    }
+
+    function toggleBookmarkModal() {
+      if (currentActiveModalId) {
+        toggleBookmark(currentActiveModalId);
+        const conf = conferences.find(c => c.id === currentActiveModalId);
+        updateModalBookmarkUI(conf.bookmarked);
+      }
+    }
+
+    function updateModalBookmarkUI(isBookmarked) {
+      const btn = document.getElementById('modalBookmarkBtn');
+      const text = document.getElementById('modalBookmarkText');
+      if (isBookmarked) {
+        btn.classList.add('border-cyan-500/60', 'bg-cyan-950/30', 'text-cyan-300');
+        text.textContent = 'Saved to Watchlist';
+      } else {
+        btn.classList.remove('border-cyan-500/60', 'bg-cyan-950/30', 'text-cyan-300');
+        text.textContent = 'Save to Watchlist';
+      }
+      lucide.createIcons();
+    }
+
+    function registerEvent() {
+      alert('Opening conference registration portal for this event.');
+    }
+
+    // Toast Alert Trigger
+    let toastTimeout;
+    function showToast(title, message) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMessage').textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+      lucide.createIcons();
+    }
+
+    // Event Listeners for Modal dismissal & shortcuts
+    window.addEventListener('click', (e) => {
+      const detailModal = document.getElementById('eventModal');
+      const addModal = document.getElementById('addEventModal');
+      if (e.target === detailModal) closeModal();
+      if (e.target === addModal) closeAddModal();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeAddModal();
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('searchInput').focus();
+      }
+    });
+
+    // Initial render
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategoryFilters();
+      render();
+    });
+  </script>
+</body>
+</html>
