@@ -124,6 +124,11 @@
       color: #67e8f9;
       border: 1px solid rgba(6, 182, 212, 0.35);
     }
+    .tag-staff {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
   </style>
 </head>
 <body class="bg-[#070b14] text-slate-100 min-h-screen font-body antialiased selection:bg-indigo-500 selection:text-white flex flex-col">
@@ -148,7 +153,7 @@
         </div>
         <div>
           <span class="font-sans font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">NEXUS<span class="text-cyan-400">EXPO</span></span>
-          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] uppercase font-semibold tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">Enterprise Hub</span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] uppercase font-semibold tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">Global Ops</span>
         </div>
       </div>
 
@@ -159,7 +164,7 @@
           <input 
             type="text" 
             id="searchInput"
-            placeholder="Search events, #initiatives, #products, booth..." 
+            placeholder="Search events, city, lead, staff, #initiatives..." 
             class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-700/60 rounded-xl text-sm placeholder-slate-400 text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
             oninput="handleSearch(this.value)"
           />
@@ -208,13 +213,13 @@
               <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
               FY26 Active (Starts Nov 1, 2025)
             </span>
-            <span class="text-xs text-slate-400">• Reference: Sep 03, 2026</span>
+            <span class="text-xs text-slate-400">• Multi-Region & Staffing Matrix</span>
           </div>
           <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-white tracking-tight">
             Global Trade Shows & Conferences
           </h1>
           <p class="text-slate-400 text-sm mt-1.5 max-w-2xl">
-            Enterprise event management dashboard mapping strategic initiatives, featured products, booth logistics, and fiscal cadence.
+            Enterprise event management dashboard mapping strategic initiatives, featured products, booth logistics, regional hierarchy, and assigned staff.
           </p>
         </div>
 
@@ -229,12 +234,12 @@
             <p id="metricTotalReach" class="text-lg sm:text-xl font-bold font-sans text-cyan-300 mt-0.5">0k</p>
           </div>
           <div class="glass-panel px-3.5 py-2.5 rounded-2xl border border-slate-800">
-            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Initiatives</p>
-            <p id="metricInitiativesCount" class="text-lg sm:text-xl font-bold font-sans text-indigo-300 mt-0.5">0</p>
+            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Regions Active</p>
+            <p id="metricRegionsCount" class="text-lg sm:text-xl font-bold font-sans text-purple-300 mt-0.5">4</p>
           </div>
           <div class="glass-panel px-3.5 py-2.5 rounded-2xl border border-slate-800">
-            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Products</p>
-            <p id="metricProductsCount" class="text-lg sm:text-xl font-bold font-sans text-emerald-300 mt-0.5">0</p>
+            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Staff Deployed</p>
+            <p id="metricStaffCount" class="text-lg sm:text-xl font-bold font-sans text-emerald-300 mt-0.5">0</p>
           </div>
         </div>
       </div>
@@ -242,18 +247,17 @@
       <!-- Controls & Multi-tier Filter Toolbar -->
       <div class="space-y-3.5 mt-6">
         
-        <!-- NEW: Fiscal & Calendar Temporal Filter Bar + Past vs Future Toggle -->
+        <!-- 1. Fiscal & Calendar Temporal Filter Bar + Past vs Future Toggle -->
         <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           
-          <!-- Period Selector Dropdown & Timeline Toggle -->
           <div class="flex flex-wrap items-center gap-2.5">
             <!-- Period Preset Selector -->
             <div class="flex items-center gap-1.5 text-xs text-slate-300">
               <i data-lucide="calendar-range" class="w-4 h-4 text-cyan-400"></i>
               <span class="font-semibold text-slate-200">Period:</span>
-              <select id="periodFilterSelect" onchange="handlePeriodChange(this.value)" class="bg-slate-950 border border-slate-700/80 text-cyan-300 font-semibold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
-                <option value="all">All Time (Unrestricted)</option>
-                <option value="current-fy" selected>Current Fiscal Year (FY26: Nov '25 - Oct '26)</option>
+              <select id="periodFilterSelect" onchange="handlePeriodChange(this.value)" class="bg-slate-950 border border-slate-700/80 text-cyan-300 font-semibold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-500">
+                <option value="all" selected>All Time (Unrestricted)</option>
+                <option value="current-fy">Current Fiscal Year (FY26: Nov '25 - Oct '26)</option>
                 <option value="current-fq">Current Fiscal Quarter (FY26 Q4: Aug - Oct '26)</option>
                 <option value="current-cy">Current Calendar Year (CY 2026)</option>
                 <option value="current-cq">Current Calendar Quarter (CY Q3: Jul - Sep '26)</option>
@@ -265,10 +269,10 @@
 
             <!-- Past vs Future Toggle -->
             <div class="flex items-center bg-slate-950 border border-slate-700/80 rounded-xl p-0.5 text-xs">
-              <button onclick="setTimelineFilter('all')" id="timelineAllBtn" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors">
+              <button onclick="setTimelineFilter('all')" id="timelineAllBtn" class="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-semibold transition-colors">
                 All
               </button>
-              <button onclick="setTimelineFilter('future')" id="timelineFutureBtn" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold transition-colors">
+              <button onclick="setTimelineFilter('future')" id="timelineFutureBtn" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors">
                 Upcoming / Future
               </button>
               <button onclick="setTimelineFilter('past')" id="timelinePastBtn" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors">
@@ -293,7 +297,75 @@
 
         </div>
 
-        <!-- Primary Filter Row: Category Pills & Mode Switcher -->
+        <!-- 2. Location & Staffing Filter Bar (Region, Country, City, Lead, Supporting Staff) -->
+        <div class="p-3 rounded-2xl bg-slate-900/90 border border-slate-800/90 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="flex flex-wrap items-center gap-3">
+            
+            <!-- Region Filter -->
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400 font-semibold flex items-center gap-1">
+                <i data-lucide="globe-2" class="w-3.5 h-3.5 text-purple-400"></i> Region:
+              </span>
+              <select id="regionFilterSelect" onchange="handleRegionChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-purple-300 focus:outline-none focus:border-purple-500">
+                <option value="all">All Regions</option>
+                <option value="Americas">Americas</option>
+                <option value="Europe">Europe</option>
+                <option value="META">META (Middle East / Africa)</option>
+                <option value="APAC">APAC (Asia-Pacific)</option>
+              </select>
+            </div>
+
+            <!-- Country Filter -->
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400 font-semibold flex items-center gap-1">
+                <i data-lucide="flag" class="w-3.5 h-3.5 text-indigo-400"></i> Country:
+              </span>
+              <select id="countryFilterSelect" onchange="handleCountryChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-indigo-300 focus:outline-none focus:border-indigo-500">
+                <option value="all">All Countries</option>
+              </select>
+            </div>
+
+            <!-- City Filter -->
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400 font-semibold flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i> City:
+              </span>
+              <select id="cityFilterSelect" onchange="handleCityChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-cyan-300 focus:outline-none focus:border-cyan-500">
+                <option value="all">All Cities</option>
+              </select>
+            </div>
+
+            <div class="h-4 w-px bg-slate-800 hidden sm:block"></div>
+
+            <!-- Event Lead Filter -->
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400 font-semibold flex items-center gap-1">
+                <i data-lucide="user-check" class="w-3.5 h-3.5 text-amber-400"></i> Event Lead:
+              </span>
+              <select id="leadFilterSelect" onchange="handleLeadChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 focus:outline-none focus:border-amber-500">
+                <option value="all">All Event Leads</option>
+              </select>
+            </div>
+
+            <!-- Supporting Staff Filter -->
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400 font-semibold flex items-center gap-1">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-rose-400"></i> Supporting Staff:
+              </span>
+              <select id="staffFilterSelect" onchange="handleStaffChange(this.value)" class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-rose-300 focus:outline-none focus:border-rose-500">
+                <option value="all">All Staff Members</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Reset Location/Staff Filters -->
+          <button onclick="resetLocationStaffFilters()" class="text-[11px] text-slate-400 hover:text-white underline">
+            Reset Filters
+          </button>
+        </div>
+
+        <!-- 3. Primary Filter Row: Category Pills & Mode Switcher -->
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           <!-- Category Filter Pills -->
           <div id="categoryFilterContainer" class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
@@ -327,7 +399,7 @@
           </div>
         </div>
 
-        <!-- Secondary Filter Row: Featured Strategic Initiatives Filter Bar -->
+        <!-- 4. Strategic Initiatives Filter Bar -->
         <div class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar border-t border-slate-800/60">
           <div class="flex items-center gap-1.5 text-xs text-indigo-300 font-semibold shrink-0 pr-1">
             <i data-lucide="target" class="w-3.5 h-3.5"></i>
@@ -338,7 +410,7 @@
           </div>
         </div>
 
-        <!-- Tertiary Filter Row: Featured Products Showcase Filter Bar -->
+        <!-- 5. Featured Products Showcase Filter Bar -->
         <div class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar border-t border-slate-800/60">
           <div class="flex items-center gap-1.5 text-xs text-cyan-300 font-semibold shrink-0 pr-1">
             <i data-lucide="box" class="w-3.5 h-3.5"></i>
@@ -354,7 +426,7 @@
 
     <!-- Active Filter Badge Bar (If any active) -->
     <div id="activeFilterBadgeBar" class="hidden mb-6 flex items-center gap-2 flex-wrap text-xs bg-slate-900/60 border border-slate-800/80 px-3.5 py-2 rounded-xl">
-      <span class="text-slate-400">Active Criteria:</span>
+      <span class="text-slate-400">Active Filters:</span>
       <div id="activeTagsContainer" class="flex items-center gap-2 flex-wrap"></div>
       <button onclick="resetFilters()" class="ml-auto text-[11px] text-rose-400 hover:text-rose-300 font-medium underline">
         Clear All Filters
@@ -374,11 +446,11 @@
             <thead class="bg-slate-900/90 text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-800 font-semibold">
               <tr>
                 <th scope="col" class="px-5 py-4">Event & Category</th>
-                <th scope="col" class="px-5 py-4">Location & Stand #</th>
+                <th scope="col" class="px-5 py-4">Region, Country & Venue</th>
                 <th scope="col" class="px-5 py-4">Timeline & Cadence</th>
+                <th scope="col" class="px-5 py-4">Assigned Team (Lead & Staff)</th>
                 <th scope="col" class="px-5 py-4">Featured Initiatives & Products</th>
                 <th scope="col" class="px-5 py-4">Status & Tier</th>
-                <th scope="col" class="px-5 py-4 text-center">Metrics</th>
                 <th scope="col" class="px-5 py-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -396,7 +468,7 @@
         <i data-lucide="calendar-x" class="w-8 h-8"></i>
       </div>
       <h3 class="text-lg font-semibold text-slate-200 font-sans">No conferences match your criteria</h3>
-      <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Try clearing your filters, initiative tags, temporal period, or search query.</p>
+      <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Try clearing your filters, region/country/lead selectors, or search query.</p>
       <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-xl text-xs font-semibold transition-colors">
         Reset All Filters
       </button>
@@ -469,7 +541,7 @@
           </div>
           <div>
             <h3 id="formModalTitle" class="text-xl font-bold font-sans text-white">Add New Conference / Expo</h3>
-            <p id="formModalSubtitle" class="text-xs text-slate-400">Configure logistics, featured initiatives, products & metadata</p>
+            <p id="formModalSubtitle" class="text-xs text-slate-400">Configure logistics, location hierarchy, staffing, initiatives & products</p>
           </div>
         </div>
         <button onclick="closeFormModal()" class="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors">
@@ -539,42 +611,66 @@
           </div>
         </div>
 
-        <!-- Venue & Booth Location in 3 cols -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="sm:col-span-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Booth / Stand #
+        <!-- NEW: Location Hierarchy (Region, Country, City) -->
+        <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+              <i data-lucide="globe-2" class="w-3.5 h-3.5"></i> Location Hierarchy (Region, Country, City)
             </label>
-            <input 
-              type="text" 
-              id="eventFormBooth" 
-              placeholder="e.g. Hall 3 — Stand #3B42" 
-              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-            />
+            <span class="text-[10px] text-slate-400">Used for regional rollup</span>
           </div>
-          <div class="sm:col-span-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Full Venue Name <span class="text-rose-400">*</span>
-            </label>
-            <input 
-              type="text" 
-              id="eventFormLocation" 
-              required 
-              placeholder="e.g. Moscone Center, SF, CA" 
-              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-            />
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Region <span class="text-rose-400">*</span></label>
+              <select id="eventFormRegion" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-purple-300 focus:outline-none focus:border-purple-500">
+                <option value="Americas">Americas</option>
+                <option value="Europe">Europe</option>
+                <option value="META">META (Middle East / Africa)</option>
+                <option value="APAC">APAC (Asia-Pacific)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Country <span class="text-rose-400">*</span></label>
+              <input 
+                type="text" 
+                id="eventFormCountry" 
+                required 
+                placeholder="e.g. United States, Germany, UAE" 
+                class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">City <span class="text-rose-400">*</span></label>
+              <input 
+                type="text" 
+                id="eventFormCity" 
+                required 
+                placeholder="e.g. San Francisco, London, Dubai" 
+                class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
           </div>
-          <div class="sm:col-span-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              City, Region <span class="text-rose-400">*</span>
-            </label>
-            <input 
-              type="text" 
-              id="eventFormShortLocation" 
-              required 
-              placeholder="e.g. San Francisco, CA" 
-              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-            />
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Full Venue & Address <span class="text-rose-400">*</span></label>
+              <input 
+                type="text" 
+                id="eventFormLocation" 
+                required 
+                placeholder="e.g. Moscone Center, San Francisco, CA" 
+                class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Booth / Stand #</label>
+              <input 
+                type="text" 
+                id="eventFormBooth" 
+                placeholder="e.g. Hall 4 — Stand #4A10" 
+                class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
           </div>
         </div>
 
@@ -603,6 +699,57 @@
               value="2026-10-14"
               class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
             />
+          </div>
+        </div>
+
+        <!-- NEW: Event Staffing (Event Lead & Supporting Staff) -->
+        <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Assigned Event Lead & Supporting Staff
+            </label>
+            <span class="text-[10px] text-slate-400">Team deployment</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Event Lead Manager <span class="text-rose-400">*</span></label>
+              <input 
+                type="text" 
+                id="eventFormLead" 
+                required 
+                placeholder="e.g. Sarah Jenkins" 
+                class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-amber-300 focus:outline-none focus:border-amber-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Budget / Investment</label>
+              <input 
+                type="text" 
+                id="eventFormBudget" 
+                placeholder="e.g. $180,000" 
+                class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Supporting Staff Members (comma-separated)</label>
+            <input 
+              type="text" 
+              id="eventFormSupportingStaff" 
+              placeholder="e.g. Alex Rivera, Jordan Lee, Sophia Martinez" 
+              class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-rose-300 placeholder-slate-500 focus:outline-none focus:border-rose-500"
+            />
+            <!-- Quick Staff Presets -->
+            <div class="flex items-center gap-1.5 mt-2 flex-wrap text-[11px]">
+              <span class="text-slate-500">Quick add:</span>
+              <button type="button" onclick="appendStaffMember('Alex Rivera')" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white">+ Alex Rivera</button>
+              <button type="button" onclick="appendStaffMember('Jordan Lee')" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white">+ Jordan Lee</button>
+              <button type="button" onclick="appendStaffMember('Sophia Martinez')" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white">+ Sophia Martinez</button>
+              <button type="button" onclick="appendStaffMember('Liam Patel')" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white">+ Liam Patel</button>
+              <button type="button" onclick="appendStaffMember('Emily Zhang')" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white">+ Emily Zhang</button>
+            </div>
           </div>
         </div>
 
@@ -665,48 +812,22 @@
           />
         </div>
 
-        <!-- Operational Logistics & Management Metadata in 3 cols -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Metrics: Target Leads, Attendees, Speakers, Booths in 4 cols -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Lead Event Manager
-            </label>
-            <input 
-              type="text" 
-              id="eventFormLead" 
-              placeholder="e.g. Sarah Jenkins" 
-              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-            />
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Budget / Investment
-            </label>
-            <input 
-              type="text" 
-              id="eventFormBudget" 
-              placeholder="e.g. $150,000" 
-              class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-            />
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Target Leads Goal
+              Target Leads
             </label>
             <input 
               type="number" 
               id="eventFormTargetLeads" 
-              value="400" 
+              value="450" 
               class="w-full px-3 py-2 bg-slate-900/90 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
             />
           </div>
-        </div>
-
-        <!-- Metrics: Attendees, Speakers, Booths in 3 cols -->
-        <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Expected Attendees
+              Attendees
             </label>
             <input 
               type="number" 
@@ -719,7 +840,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Keynote Speakers
+              Speakers
             </label>
             <input 
               type="number" 
@@ -732,7 +853,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Exhibitor Booths
+              Booths
             </label>
             <input 
               type="number" 
@@ -797,12 +918,13 @@
         <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md border border-white/10 transition-colors">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
-        <div class="absolute top-4 left-4 flex items-center gap-2">
+        <div class="absolute top-4 left-4 flex items-center gap-2 flex-wrap">
           <span id="modalBadge" class="glass-badge px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-md"></span>
           <span id="modalTier" class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-900/90 text-amber-300 border border-amber-500/40"></span>
+          <span id="modalRegionBadge" class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-950/90 text-purple-300 border border-purple-500/40"></span>
         </div>
         <div class="absolute bottom-4 left-6 right-6">
-          <div class="flex items-center gap-2 mb-1.5">
+          <div class="flex items-center gap-2 mb-1.5 flex-wrap">
             <span id="modalStatus" class="inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md"></span>
             <span id="modalCadenceBadge" class="text-[10px] text-cyan-300 bg-cyan-950/80 border border-cyan-800/60 px-2 py-0.5 rounded-md font-mono"></span>
             <span id="modalBooth" class="text-xs text-slate-300 bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 rounded-md font-mono"></span>
@@ -814,14 +936,14 @@
       <!-- Modal Body -->
       <div class="p-6 sm:p-8 space-y-6">
         
-        <!-- Date & Location highlight -->
+        <!-- Date, Region & Location highlight -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800">
             <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <i data-lucide="calendar" class="w-5 h-5"></i>
             </div>
             <div>
-              <p class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Conference Dates</p>
+              <p class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Dates & Cadence</p>
               <p id="modalDates" class="text-sm font-semibold text-slate-100"></p>
             </div>
           </div>
@@ -830,9 +952,24 @@
               <i data-lucide="map-pin" class="w-5 h-5"></i>
             </div>
             <div>
-              <p class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Venue & City</p>
+              <p class="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Location & Hierarchy</p>
               <p id="modalLocation" class="text-sm font-semibold text-slate-100"></p>
+              <p id="modalHierarchy" class="text-[11px] text-purple-300"></p>
             </div>
+          </div>
+        </div>
+
+        <!-- NEW: Assigned Event Team & Staffing Section -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <i data-lucide="users" class="w-4 h-4"></i> Assigned Event Staff & Field Team
+            </span>
+            <span id="modalLeadBadge" class="text-xs font-bold text-amber-300"></span>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1.5">Supporting Booth & Briefing Staff:</p>
+            <div id="modalStaffList" class="flex flex-wrap gap-1.5"></div>
           </div>
         </div>
 
@@ -840,9 +977,9 @@
         <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
             <span class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <i data-lucide="briefcase" class="w-4 h-4 text-cyan-400"></i> Event Management & Logistics
+              <i data-lucide="briefcase" class="w-4 h-4 text-cyan-400"></i> Logistics & KPI Targets
             </span>
-            <span id="modalLeadBadge" class="text-xs text-indigo-300 font-medium"></span>
+            <span id="modalLeadSub" class="text-xs text-slate-400 font-medium"></span>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div class="p-2 bg-slate-900/60 rounded-xl border border-slate-800/80">
@@ -937,14 +1074,13 @@
 
   <!-- Interactive JavaScript Logic & Data -->
   <script>
-    // Configurable Fiscal Calendar & Reference Settings (Hardcoded defaults as specified, configurable via modal/localStorage)
+    // Configurable Fiscal Calendar & Reference Settings
     let fiscalConfig = {
       startMonth: 11, // November (Month 11)
       startDay: 1,    // 1st of November
       referenceDate: '2026-09-03' // Current local reference timestamp
     };
 
-    // Load saved fiscal configuration from localStorage if available
     try {
       const savedConfig = localStorage.getItem('nexusexpo_fiscal_config');
       if (savedConfig) {
@@ -952,9 +1088,9 @@
       }
     } catch(e) {}
 
-    // Comprehensive 12 Curated Conferences spanning Past & Future across FY26 and FY27
+    // Comprehensive 13 Curated Conferences spanning Americas, Europe, META, and APAC
     let conferences = [
-      // 1. Past Event in FY26 Q2 (March 2026)
+      // 1. Europe: Spain (Barcelona)
       {
         id: 101,
         title: "MWC Global Mobile & Carrier Congress 2026",
@@ -962,9 +1098,11 @@
         categoryIcon: "zap",
         badgeGradient: "from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40",
         badgeGlow: "shadow-amber-500/20",
+        region: "Europe",
+        country: "Spain",
+        city: "Barcelona",
         location: "Fira Gran Via, Barcelona, Spain",
         shortLocation: "Barcelona, Spain",
-        country: "Spain",
         dates: "Mar 02 - 05, 2026",
         startDate: "2026-03-02",
         attendees: 28000,
@@ -976,6 +1114,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Hall 3 — Stand #3K12",
         leadManager: "Marcus Vance",
+        supportingStaff: ["Alex Rivera", "Liam Patel", "Kenji Sato"],
         budget: "$250,000",
         targetLeads: 950,
         initiatives: ["#carriers", "#tsn", "#sovereign cloud"],
@@ -984,7 +1123,7 @@
         description: "The world's largest gathering for mobile telecommunication ecosystem, 6G research, optical interconnects, and carrier cloud infrastructure.",
         bookmarked: false
       },
-      // 2. Past Event in FY26 Q4 (August 2026)
+      // 2. Americas: United States (Las Vegas)
       {
         id: 102,
         title: "Black Hat Security USA & DefCon Forum 2026",
@@ -992,9 +1131,11 @@
         categoryIcon: "shield-alert",
         badgeGradient: "from-red-500/20 to-violet-500/20 text-red-300 border-red-500/40",
         badgeGlow: "shadow-red-500/20",
+        region: "Americas",
+        country: "United States",
+        city: "Las Vegas",
         location: "Mandalay Bay Convention Center, Las Vegas, NV",
         shortLocation: "Las Vegas, NV",
-        country: "USA",
         dates: "Aug 08 - 13, 2026",
         startDate: "2026-08-08",
         attendees: 19500,
@@ -1006,6 +1147,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Oceanside — Booth #1402",
         leadManager: "Kiran Patel",
+        supportingStaff: ["Emily Zhang", "Sophia Martinez", "Carlos Gomez"],
         budget: "$220,000",
         targetLeads: 820,
         initiatives: ["#cybersecurity", "#sovereign cloud", "#ai"],
@@ -1014,7 +1156,7 @@
         description: "Premier technical information security conference providing attendees with the very latest in research, development, and exploit countermeasures.",
         bookmarked: true
       },
-      // 3. Current Calendar Month & FY26 Q4 Event (September 2026)
+      // 3. Americas: United States (Santa Clara)
       {
         id: 103,
         title: "AI Hardware & Edge Silicon Summit 2026",
@@ -1022,9 +1164,11 @@
         categoryIcon: "cpu",
         badgeGradient: "from-purple-500/20 to-indigo-500/20 text-purple-300 border-purple-500/40",
         badgeGlow: "shadow-purple-500/20",
+        region: "Americas",
+        country: "United States",
+        city: "Santa Clara",
         location: "Santa Clara Convention Center, Santa Clara, CA",
         shortLocation: "Santa Clara, CA",
-        country: "USA",
         dates: "Sep 15 - 17, 2026",
         startDate: "2026-09-15",
         attendees: 6800,
@@ -1036,6 +1180,7 @@
         tier: "Tier 2 Strategic",
         boothStand: "Hall A — Booth #504",
         leadManager: "Sarah Jenkins",
+        supportingStaff: ["Jordan Lee", "Kenji Sato"],
         budget: "$95,000",
         targetLeads: 380,
         initiatives: ["#ai", "#industrial", "#tsn"],
@@ -1044,7 +1189,7 @@
         description: "Focusing on enterprise AI hardware acceleration, neural processing units, wafer-scale chips, and low-latency interconnects.",
         bookmarked: true
       },
-      // 4. Future FY26 Q4 Event (October 2026)
+      // 4. Americas: United States (San Francisco)
       {
         id: 1,
         title: "Global AI & Robotics Summit 2026",
@@ -1052,9 +1197,11 @@
         categoryIcon: "cpu",
         badgeGradient: "from-purple-500/20 to-indigo-500/20 text-purple-300 border-purple-500/40",
         badgeGlow: "shadow-purple-500/20",
+        region: "Americas",
+        country: "United States",
+        city: "San Francisco",
         location: "Moscone Center, San Francisco, CA",
         shortLocation: "San Francisco, CA",
-        country: "USA",
         dates: "Oct 14 - 17, 2026",
         startDate: "2026-10-14",
         attendees: 14500,
@@ -1066,6 +1213,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Hall 4 — Stand #4A10",
         leadManager: "Sarah Jenkins",
+        supportingStaff: ["Alex Rivera", "Sophia Martinez", "Jordan Lee"],
         budget: "$180,000",
         targetLeads: 550,
         initiatives: ["#ai", "#industrial", "#sovereign cloud"],
@@ -1074,7 +1222,40 @@
         description: "The world's premier forum on Autonomous Systems, Frontier LLMs, Embodied AI, and Humanoid Robotics. Gathering top laboratory researchers, enterprise pioneers, and hardware developers.",
         bookmarked: true
       },
-      // 5. Future FY27 Event (Nov 2026)
+      // 5. META: United Arab Emirates (Dubai)
+      {
+        id: 104,
+        title: "GITEX Global & Cyber Valley Summit 2026",
+        category: "Cybersecurity",
+        categoryIcon: "shield-alert",
+        badgeGradient: "from-red-500/20 to-violet-500/20 text-red-300 border-red-500/40",
+        badgeGlow: "shadow-red-500/20",
+        region: "META",
+        country: "United Arab Emirates",
+        city: "Dubai",
+        location: "Dubai World Trade Centre, Dubai, UAE",
+        shortLocation: "Dubai, UAE",
+        dates: "Oct 19 - 23, 2026",
+        startDate: "2026-10-19",
+        attendees: 22000,
+        attendeesDisplay: "22.0k",
+        speakers: 190,
+        booths: 510,
+        status: "Selling Fast",
+        statusColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+        tier: "Tier 1 Flagship",
+        boothStand: "Concourse 2 — Stand #CC2-18",
+        leadManager: "Tariq Al-Mansoor",
+        supportingStaff: ["Fatima Zahra", "Liam Patel", "Emily Zhang"],
+        budget: "$240,000",
+        targetLeads: 880,
+        initiatives: ["#sovereign cloud", "#cybersecurity", "#ai"],
+        products: ["#BreakingPoint", "#CyberRange", "#CyPerf", "#APS-100/400G"],
+        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+        description: "The Middle East & Africa's most significant tech, AI, and governmental cloud defense expo, uniting global enterprises and sovereign funds.",
+        bookmarked: true
+      },
+      // 6. Europe: United Kingdom (London)
       {
         id: 2,
         title: "FinTech Disrupt World Congress",
@@ -1082,9 +1263,11 @@
         categoryIcon: "coins",
         badgeGradient: "from-emerald-500/20 to-teal-500/20 text-emerald-300 border-emerald-500/40",
         badgeGlow: "shadow-emerald-500/20",
+        region: "Europe",
+        country: "United Kingdom",
+        city: "London",
         location: "ExCeL London, London, United Kingdom",
         shortLocation: "London, UK",
-        country: "UK",
         dates: "Nov 04 - 07, 2026",
         startDate: "2026-11-04",
         attendees: 11200,
@@ -1096,6 +1279,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Level 2 — Stand #F-22",
         leadManager: "Marcus Vance",
+        supportingStaff: ["Alex Rivera", "Sophia Martinez"],
         budget: "$145,000",
         targetLeads: 420,
         initiatives: ["#sovereign cloud", "#carriers", "#cybersecurity"],
@@ -1104,7 +1288,7 @@
         description: "Unlocking the next wave of Cross-Border Settlement, Decentralized Capital Markets, Algorithmic Risk, and Autonomous Banking infrastructure.",
         bookmarked: false
       },
-      // 6. Future FY27 Event (Nov 2026)
+      // 7. Americas: United States (Boston)
       {
         id: 3,
         title: "BioHealth & MedTech International",
@@ -1112,9 +1296,11 @@
         categoryIcon: "activity",
         badgeGradient: "from-rose-500/20 to-pink-500/20 text-rose-300 border-rose-500/40",
         badgeGlow: "shadow-rose-500/20",
+        region: "Americas",
+        country: "United States",
+        city: "Boston",
         location: "BCEC, Boston, Massachusetts",
         shortLocation: "Boston, MA",
-        country: "USA",
         dates: "Nov 18 - 20, 2026",
         startDate: "2026-11-18",
         attendees: 9800,
@@ -1126,6 +1312,7 @@
         tier: "Tier 2 Strategic",
         boothStand: "Hall B — Booth #812",
         leadManager: "Elena Rostova",
+        supportingStaff: ["Carlos Gomez", "Nina Patel"],
         budget: "$95,000",
         targetLeads: 310,
         initiatives: ["#ai", "#industrial", "#tsn"],
@@ -1134,7 +1321,7 @@
         description: "Accelerating clinical breakthroughs in CRISPR therapeutics, AI-generated oncology drugs, robotic micro-surgery, and next-gen biometric diagnostic wearables.",
         bookmarked: false
       },
-      // 7. Future FY27 Event (Dec 2026)
+      // 8. Europe: Germany (Munich)
       {
         id: 4,
         title: "NextGen Auto & Electric Mobility Expo",
@@ -1142,9 +1329,11 @@
         categoryIcon: "zap",
         badgeGradient: "from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40",
         badgeGlow: "shadow-amber-500/20",
+        region: "Europe",
+        country: "Germany",
+        city: "Munich",
         location: "Messe München, Munich, Germany",
         shortLocation: "Munich, Germany",
-        country: "Germany",
         dates: "Dec 01 - 04, 2026",
         startDate: "2026-12-01",
         attendees: 18500,
@@ -1156,6 +1345,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Pavilion 3 — Stand #314",
         leadManager: "Dirk Becker",
+        supportingStaff: ["Carlos Gomez", "Liam Patel", "Kenji Sato"],
         budget: "$210,000",
         targetLeads: 700,
         initiatives: ["#industrial", "#tsn", "#ai"],
@@ -1164,7 +1354,7 @@
         description: "Europe's most influential automotive trade show showcasing Solid-State Battery tech, Autonomous Level 4 fleet platforms, and ultra-fast Megawatt charging infrastructure.",
         bookmarked: true
       },
-      // 8. Future FY27 Event (Jan 2027)
+      // 9. Europe: Denmark (Copenhagen)
       {
         id: 5,
         title: "CleanEnergy & Climate Solutions Expo",
@@ -1172,9 +1362,11 @@
         categoryIcon: "leaf",
         badgeGradient: "from-teal-500/20 to-emerald-500/20 text-teal-300 border-teal-500/40",
         badgeGlow: "shadow-teal-500/20",
+        region: "Europe",
+        country: "Denmark",
+        city: "Copenhagen",
         location: "Bella Center, Copenhagen, Denmark",
         shortLocation: "Copenhagen, Denmark",
-        country: "Denmark",
         dates: "Jan 12 - 15, 2027",
         startDate: "2027-01-12",
         attendees: 8400,
@@ -1186,6 +1378,7 @@
         tier: "Tier 2 Strategic",
         boothStand: "Green Atrium — Booth #G-08",
         leadManager: "Astrid Lind",
+        supportingStaff: ["Nina Patel", "Sophia Martinez"],
         budget: "$85,000",
         targetLeads: 260,
         initiatives: ["#industrial", "#sovereign cloud", "#tsn"],
@@ -1194,7 +1387,7 @@
         description: "Uniting clean tech founders, sovereign climate funds, and grid operators to scale direct air capture, offshore wind megastructures, and fusion power prototypes.",
         bookmarked: false
       },
-      // 9. Future FY27 Event (Jan 2027)
+      // 10. Americas: United States (Seattle)
       {
         id: 6,
         title: "CloudScale & DevOps Architecture Expo",
@@ -1202,9 +1395,11 @@
         categoryIcon: "server",
         badgeGradient: "from-sky-500/20 to-blue-500/20 text-sky-300 border-sky-500/40",
         badgeGlow: "shadow-sky-500/20",
+        region: "Americas",
+        country: "United States",
+        city: "Seattle",
         location: "Seattle Convention Center, Seattle, WA",
         shortLocation: "Seattle, WA",
-        country: "USA",
         dates: "Jan 26 - 29, 2027",
         startDate: "2027-01-26",
         attendees: 12800,
@@ -1216,6 +1411,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Expo Central — Stand #C-501",
         leadManager: "David Chen",
+        supportingStaff: ["Kenji Sato", "Alex Rivera", "Jordan Lee"],
         budget: "$160,000",
         targetLeads: 520,
         initiatives: ["#sovereign cloud", "#carriers", "#ai"],
@@ -1224,7 +1420,7 @@
         description: "The global gathering for Site Reliability Engineers, Kubernetes architects, Platform engineers, and Distributed Systems innovators.",
         bookmarked: true
       },
-      // 10. Future FY27 Event (Feb 2027)
+      // 11. APAC: Singapore
       {
         id: 7,
         title: "CyberShield Global Defense Forum",
@@ -1232,9 +1428,11 @@
         categoryIcon: "shield-alert",
         badgeGradient: "from-red-500/20 to-violet-500/20 text-red-300 border-red-500/40",
         badgeGlow: "shadow-red-500/20",
+        region: "APAC",
+        country: "Singapore",
+        city: "Singapore",
         location: "Marina Bay Sands Expo, Singapore",
         shortLocation: "Singapore",
-        country: "Singapore",
         dates: "Feb 10 - 13, 2027",
         startDate: "2027-02-10",
         attendees: 7200,
@@ -1246,6 +1444,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Sands Hall A — Stand #S-102",
         leadManager: "Kiran Patel",
+        supportingStaff: ["Emily Zhang", "Kenji Sato", "Fatima Zahra"],
         budget: "$175,000",
         targetLeads: 480,
         initiatives: ["#cybersecurity", "#aerospace&defense", "#sovereign cloud"],
@@ -1254,7 +1453,7 @@
         description: "Intelligence officers, CISOs, and ethical red teams meet to counter nation-state cyber threats, quantum decryption, and AI-driven social engineering vectors.",
         bookmarked: false
       },
-      // 11. Future FY27 Event (Mar 2027)
+      // 12. Europe: Netherlands (Amsterdam)
       {
         id: 8,
         title: "DesignOps & Creative Frontiers Summit",
@@ -1262,9 +1461,11 @@
         categoryIcon: "palette",
         badgeGradient: "from-fuchsia-500/20 to-pink-500/20 text-fuchsia-300 border-fuchsia-500/40",
         badgeGlow: "shadow-fuchsia-500/20",
+        region: "Europe",
+        country: "Netherlands",
+        city: "Amsterdam",
         location: "RAI Amsterdam, Amsterdam, Netherlands",
         shortLocation: "Amsterdam, NL",
-        country: "Netherlands",
         dates: "Mar 03 - 06, 2027",
         startDate: "2027-03-03",
         attendees: 6100,
@@ -1276,6 +1477,7 @@
         tier: "Tier 3 Regional",
         boothStand: "Hall 7 — Booth #72",
         leadManager: "Chloe Dubois",
+        supportingStaff: ["Sophia Martinez"],
         budget: "$60,000",
         targetLeads: 190,
         initiatives: ["#ai", "#sovereign cloud"],
@@ -1284,7 +1486,7 @@
         description: "Exploring Spatial UX for XR hardware, generative UI design systems, brand synthesis, and human-centered design in the age of autonomous agents.",
         bookmarked: false
       },
-      // 12. Future FY27 Event (Mar 2027)
+      // 13. Americas: United States (Houston)
       {
         id: 9,
         title: "SpaceTech & Commercial Aerospace Expo",
@@ -1292,9 +1494,11 @@
         categoryIcon: "rocket",
         badgeGradient: "from-blue-500/20 to-indigo-500/20 text-sky-300 border-sky-500/40",
         badgeGlow: "shadow-sky-500/20",
+        region: "Americas",
+        country: "United States",
+        city: "Houston",
         location: "George R. Brown Center, Houston, Texas",
         shortLocation: "Houston, TX",
-        country: "USA",
         dates: "Mar 22 - 25, 2027",
         startDate: "2027-03-22",
         attendees: 15000,
@@ -1306,6 +1510,7 @@
         tier: "Tier 1 Flagship",
         boothStand: "Titan Hangar — Stand #T-10",
         leadManager: "Robert Hayes",
+        supportingStaff: ["Liam Patel", "Alex Rivera", "Carlos Gomez"],
         budget: "$195,000",
         targetLeads: 620,
         initiatives: ["#aerospace&defense", "#carriers", "#tsn", "#cybersecurity"],
@@ -1319,13 +1524,18 @@
     let currentCategory = 'all';
     let currentInitiativeFilter = 'all';
     let currentProductFilter = 'all';
-    let currentPeriodFilter = 'all'; // Default to all time so all 12 events are visible initially
-    let currentTimelineFilter = 'all'; // 'all', 'future', 'past'
+    let currentPeriodFilter = 'all'; 
+    let currentTimelineFilter = 'all'; 
+    let currentRegionFilter = 'all';
+    let currentCountryFilter = 'all';
+    let currentCityFilter = 'all';
+    let currentLeadFilter = 'all';
+    let currentStaffFilter = 'all';
     let customStartDate = '';
     let customEndDate = '';
     let searchQuery = '';
     let currentSort = 'date-asc';
-    let currentViewMode = 'grid'; // 'grid' or 'table'
+    let currentViewMode = 'grid'; 
     let currentActiveModalId = null;
 
     // Category Style Configuration
@@ -1355,25 +1565,16 @@
     function getCadenceBoundaries() {
       const ref = new Date(fiscalConfig.referenceDate);
       const refYear = ref.getFullYear();
-      const refMonth = ref.getMonth() + 1; // 1-12
-      const refDay = ref.getDate();
-
-      // FY begins Nov 1st (month 11).
-      // If current month >= 11, then current FY is (refYear + 1). E.g. Nov 2025 is FY26.
-      // If current month < 11, then current FY is refYear. E.g. Sep 2026 is FY26.
+      const refMonth = ref.getMonth() + 1;
       const currentFY = (refMonth >= fiscalConfig.startMonth) ? (refYear + 1) : refYear;
 
-      // FY start date & end date
       const fyStart = new Date(currentFY - 1, fiscalConfig.startMonth - 1, fiscalConfig.startDay);
-      const fyEnd = new Date(currentFY, fiscalConfig.startMonth - 1, 0, 23, 59, 59); // Last day of October
+      const fyEnd = new Date(currentFY, fiscalConfig.startMonth - 1, 0, 23, 59, 59);
 
-      // FY Quarters (3-month segments):
-      // Q1: Nov - Jan
-      // Q2: Feb - Apr
-      // Q3: May - Jul
-      // Q4: Aug - Oct
-      let fqNum = 1;
-      let fqStart, fqEnd;
+      let fqNum = 4;
+      let fqStart = new Date(currentFY, 7, 1);
+      let fqEnd = new Date(currentFY, 9, 31, 23, 59, 59);
+
       if (ref >= new Date(currentFY - 1, 10, 1) && ref <= new Date(currentFY, 0, 31, 23, 59, 59)) {
         fqNum = 1;
         fqStart = new Date(currentFY - 1, 10, 1);
@@ -1386,27 +1587,19 @@
         fqNum = 3;
         fqStart = new Date(currentFY, 4, 1);
         fqEnd = new Date(currentFY, 6, 31, 23, 59, 59);
-      } else {
-        fqNum = 4;
-        fqStart = new Date(currentFY, 7, 1);
-        fqEnd = new Date(currentFY, 9, 31, 23, 59, 59);
       }
 
-      // Next Fiscal Year:
       const nextFY = currentFY + 1;
       const nextFYStart = new Date(currentFY, fiscalConfig.startMonth - 1, fiscalConfig.startDay);
       const nextFYEnd = new Date(nextFY, fiscalConfig.startMonth - 1, 0, 23, 59, 59);
 
-      // Calendar Year (CY)
       const cyStart = new Date(refYear, 0, 1);
       const cyEnd = new Date(refYear, 11, 31, 23, 59, 59);
 
-      // Calendar Quarter (CQ)
       const cqNum = Math.floor((refMonth - 1) / 3) + 1;
       const cqStart = new Date(refYear, (cqNum - 1) * 3, 1);
       const cqEnd = new Date(refYear, cqNum * 3, 0, 23, 59, 59);
 
-      // Calendar Month (CM)
       const cmStart = new Date(refYear, refMonth - 1, 1);
       const cmEnd = new Date(refYear, refMonth, 0, 23, 59, 59);
 
@@ -1430,7 +1623,6 @@
       };
     }
 
-    // Returns event Cadence Pill (e.g. "FY26 Q4" or "FY27 Q1")
     function getEventFiscalTag(dateString) {
       const d = new Date(dateString);
       const y = d.getFullYear();
@@ -1446,7 +1638,6 @@
       return `FY${fy.toString().slice(-2)} Q${q}`;
     }
 
-    // Check if event start date falls within active period filter
     function checkDateInPeriod(dateString) {
       if (currentPeriodFilter === 'all' && !customStartDate && !customEndDate) return true;
 
@@ -1460,48 +1651,70 @@
       }
 
       switch(currentPeriodFilter) {
-        case 'current-fy':
-          return d >= bounds.fyStart && d <= bounds.fyEnd;
-        case 'current-fq':
-          return d >= bounds.fqStart && d <= bounds.fqEnd;
-        case 'current-cy':
-          return d >= bounds.cyStart && d <= bounds.cyEnd;
-        case 'current-cq':
-          return d >= bounds.cqStart && d <= bounds.cqEnd;
-        case 'current-cm':
-          return d >= bounds.cmStart && d <= bounds.cmEnd;
-        case 'next-fy':
-          return d >= bounds.nextFYStart && d <= bounds.nextFYEnd;
+        case 'current-fy': return d >= bounds.fyStart && d <= bounds.fyEnd;
+        case 'current-fq': return d >= bounds.fqStart && d <= bounds.fqEnd;
+        case 'current-cy': return d >= bounds.cyStart && d <= bounds.cyEnd;
+        case 'current-cq': return d >= bounds.cqStart && d <= bounds.cqEnd;
+        case 'current-cm': return d >= bounds.cmStart && d <= bounds.cmEnd;
+        case 'next-fy': return d >= bounds.nextFYStart && d <= bounds.nextFYEnd;
         case 'all':
-        default:
-          return true;
+        default: return true;
       }
     }
 
-    // Check Timeline Filter (Past vs. Future relative to reference date)
     function checkTimeline(dateString) {
       if (currentTimelineFilter === 'all') return true;
       const d = new Date(dateString);
       const ref = new Date(fiscalConfig.referenceDate);
-      if (currentTimelineFilter === 'future') {
-        return d >= ref;
-      } else if (currentTimelineFilter === 'past') {
-        return d < ref;
+      return currentTimelineFilter === 'future' ? (d >= ref) : (d < ref);
+    }
+
+    // Populate Location & Staffing Dropdowns (Cascade awareness)
+    function populateLocationAndStaffDropdowns() {
+      // 1. Countries (filtered by currentRegionFilter if set)
+      const countrySelect = document.getElementById('countryFilterSelect');
+      const filteredByRegion = currentRegionFilter === 'all' 
+        ? conferences 
+        : conferences.filter(c => c.region === currentRegionFilter);
+      
+      const availableCountries = Array.from(new Set(filteredByRegion.map(c => c.country).filter(Boolean))).sort();
+      countrySelect.innerHTML = `<option value="all">All Countries (${availableCountries.length})</option>` + 
+        availableCountries.map(ctry => `<option value="${ctry}" ${currentCountryFilter === ctry ? 'selected' : ''}>${ctry}</option>`).join('');
+
+      // 2. Cities (filtered by currentCountryFilter & currentRegionFilter)
+      const citySelect = document.getElementById('cityFilterSelect');
+      let filteredForCities = filteredByRegion;
+      if (currentCountryFilter !== 'all') {
+        filteredForCities = filteredForCities.filter(c => c.country === currentCountryFilter);
       }
-      return true;
+      const availableCities = Array.from(new Set(filteredForCities.map(c => c.city).filter(Boolean))).sort();
+      citySelect.innerHTML = `<option value="all">All Cities (${availableCities.length})</option>` + 
+        availableCities.map(cty => `<option value="${cty}" ${currentCityFilter === cty ? 'selected' : ''}>${cty}</option>`).join('');
+
+      // 3. Event Leads
+      const leadSelect = document.getElementById('leadFilterSelect');
+      const availableLeads = Array.from(new Set(conferences.map(c => c.leadManager).filter(Boolean))).sort();
+      leadSelect.innerHTML = `<option value="all">All Event Leads (${availableLeads.length})</option>` + 
+        availableLeads.map(ld => `<option value="${ld}" ${currentLeadFilter === ld ? 'selected' : ''}>${ld}</option>`).join('');
+
+      // 4. Supporting Staff
+      const staffSelect = document.getElementById('staffFilterSelect');
+      const availableStaff = Array.from(new Set(conferences.flatMap(c => c.supportingStaff || []))).sort();
+      staffSelect.innerHTML = `<option value="all">All Staff Members (${availableStaff.length})</option>` + 
+        availableStaff.map(st => `<option value="${st}" ${currentStaffFilter === st ? 'selected' : ''}>${st}</option>`).join('');
     }
 
     // Update Header Metric KPIs
     function updateMetrics(visibleData) {
       const dataToCount = visibleData || getProcessedData();
       const totalAttendees = dataToCount.reduce((sum, c) => sum + (c.attendees || 0), 0);
-      const allInitiatives = new Set(dataToCount.flatMap(c => c.initiatives || []));
-      const allProducts = new Set(dataToCount.flatMap(c => c.products || []));
+      const allRegions = new Set(dataToCount.map(c => c.region).filter(Boolean));
+      const allStaff = new Set(dataToCount.flatMap(c => [c.leadManager, ...(c.supportingStaff || [])]).filter(Boolean));
 
       document.getElementById('metricTotalExpos').textContent = dataToCount.length;
       document.getElementById('metricTotalReach').textContent = `${(totalAttendees / 1000).toFixed(1)}k`;
-      document.getElementById('metricInitiativesCount').textContent = allInitiatives.size;
-      document.getElementById('metricProductsCount').textContent = allProducts.size;
+      document.getElementById('metricRegionsCount').textContent = allRegions.size;
+      document.getElementById('metricStaffCount').textContent = allStaff.size;
 
       const bounds = getCadenceBoundaries();
       document.getElementById('navFiscalBadge').textContent = `FY${bounds.currentFY.toString().slice(-2)} Q${bounds.fqNum}`;
@@ -1511,7 +1724,7 @@
       `;
     }
 
-    // Render Filter Bars
+    // Render Filters
     function renderFilters() {
       // 1. Categories
       const catContainer = document.getElementById('categoryFilterContainer');
@@ -1577,6 +1790,7 @@
         `;
       }).join('');
 
+      populateLocationAndStaffDropdowns();
       updateActiveFilterBar();
     }
 
@@ -1595,6 +1809,21 @@
       }
       if (customStartDate || customEndDate) {
         badges.push(`<span class="px-2 py-0.5 rounded-md bg-purple-950 text-purple-300 border border-purple-700">Dates: <strong>${customStartDate || '...'} → ${customEndDate || '...'}</strong></span>`);
+      }
+      if (currentRegionFilter !== 'all') {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-purple-950 text-purple-300 border border-purple-700">Region: <strong>${currentRegionFilter}</strong></span>`);
+      }
+      if (currentCountryFilter !== 'all') {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-indigo-950 text-indigo-300 border border-indigo-700">Country: <strong>${currentCountryFilter}</strong></span>`);
+      }
+      if (currentCityFilter !== 'all') {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-sky-950 text-sky-300 border border-sky-700">City: <strong>${currentCityFilter}</strong></span>`);
+      }
+      if (currentLeadFilter !== 'all') {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-amber-950 text-amber-300 border border-amber-700">Lead: <strong>${currentLeadFilter}</strong></span>`);
+      }
+      if (currentStaffFilter !== 'all') {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-rose-950 text-rose-300 border border-rose-700">Staff: <strong>${currentStaffFilter}</strong></span>`);
       }
       if (currentCategory !== 'all') {
         badges.push(`<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-200 border border-slate-700">Category: <strong>${currentCategory}</strong></span>`);
@@ -1627,6 +1856,15 @@
         // Past vs Future timeline match
         if (!checkTimeline(conf.startDate)) return false;
 
+        // Location Hierarchy: Region, Country, City
+        if (currentRegionFilter !== 'all' && conf.region !== currentRegionFilter) return false;
+        if (currentCountryFilter !== 'all' && conf.country !== currentCountryFilter) return false;
+        if (currentCityFilter !== 'all' && conf.city !== currentCityFilter) return false;
+
+        // Staffing: Lead & Supporting Staff
+        if (currentLeadFilter !== 'all' && conf.leadManager !== currentLeadFilter) return false;
+        if (currentStaffFilter !== 'all' && !(conf.supportingStaff && conf.supportingStaff.includes(currentStaffFilter))) return false;
+
         // Category Match
         const matchesCategory = currentCategory === 'all' || conf.category === currentCategory;
 
@@ -1642,9 +1880,12 @@
         const query = searchQuery.toLowerCase();
         const matchesSearch = query === '' || 
           conf.title.toLowerCase().includes(query) ||
-          (conf.shortLocation && conf.shortLocation.toLowerCase().includes(query)) ||
+          (conf.city && conf.city.toLowerCase().includes(query)) ||
+          (conf.country && conf.country.toLowerCase().includes(query)) ||
+          (conf.region && conf.region.toLowerCase().includes(query)) ||
           (conf.location && conf.location.toLowerCase().includes(query)) ||
-          (conf.boothStand && conf.boothStand.toLowerCase().includes(query)) ||
+          (conf.leadManager && conf.leadManager.toLowerCase().includes(query)) ||
+          (conf.supportingStaff && conf.supportingStaff.some(s => s.toLowerCase().includes(query))) ||
           (conf.initiatives && conf.initiatives.some(i => i.toLowerCase().includes(query))) ||
           (conf.products && conf.products.some(p => p.toLowerCase().includes(query)));
 
@@ -1709,11 +1950,14 @@
         const topProducts = (conf.products || []).slice(0, 2);
         const remainingProd = (conf.products || []).length - 2;
 
+        const staffList = (conf.supportingStaff || []).slice(0, 2);
+        const remainingStaff = (conf.supportingStaff || []).length - 2;
+
         const fiscalCadence = getEventFiscalTag(conf.startDate);
         const isPast = new Date(conf.startDate) < new Date(fiscalConfig.referenceDate);
 
         return `
-        <div class="event-card group relative h-[530px] rounded-3xl overflow-hidden cursor-pointer border border-slate-700/60 hover:border-cyan-500/60 shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card-hover flex flex-col justify-between" onclick="openModal(${conf.id})">
+        <div class="event-card group relative h-[550px] rounded-3xl overflow-hidden cursor-pointer border border-slate-700/60 hover:border-cyan-500/60 shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card-hover flex flex-col justify-between" onclick="openModal(${conf.id})">
           
           <!-- Background Photographic Image with Zoom Effect -->
           <div class="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
@@ -1736,9 +1980,12 @@
                 <i data-lucide="${conf.categoryIcon || 'tag'}" class="w-3.5 h-3.5"></i>
                 <span class="text-xs font-bold tracking-wide">${conf.category}</span>
               </div>
-              <div class="flex items-center gap-1.5">
+              <div class="flex items-center gap-1.5 flex-wrap">
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-900/90 text-amber-300 border border-amber-500/40 w-fit backdrop-blur-md">
                   ${conf.tier || 'Tier 1 Flagship'}
+                </span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-purple-950/90 text-purple-300 border border-purple-600/50 backdrop-blur-md">
+                  ${conf.region || 'Americas'}
                 </span>
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-cyan-950/90 text-cyan-300 border border-cyan-700/50 backdrop-blur-md">
                   ${fiscalCadence}
@@ -1791,11 +2038,11 @@
               ${conf.title}
             </h3>
 
-            <!-- Location & Dates -->
+            <!-- Location Hierarchy & Dates -->
             <div class="mt-2.5 space-y-1 text-xs text-slate-300 font-medium">
               <div class="flex items-center gap-2 text-slate-200">
                 <i data-lucide="building" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
-                <span class="truncate">${conf.location}</span>
+                <span class="truncate">${conf.city}, ${conf.country} • ${conf.location}</span>
               </div>
               <div class="flex items-center gap-2 text-slate-300">
                 <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i>
@@ -1803,8 +2050,17 @@
               </div>
             </div>
 
+            <!-- Team / Staff Assignment Capsule -->
+            <div class="mt-2 pt-2 border-t border-white/10 flex items-center gap-1.5 text-[11px] text-slate-300 flex-wrap">
+              <span class="text-amber-300 font-semibold flex items-center gap-1">
+                <i data-lucide="user-check" class="w-3 h-3 text-amber-400"></i> ${conf.leadManager || 'Lead'}:
+              </span>
+              ${staffList.map(st => `<span class="tag-staff text-[10px] px-1.5 py-0.5 rounded font-medium">${st}</span>`).join('')}
+              ${remainingStaff > 0 ? `<span class="text-[10px] text-slate-400 font-mono">+${remainingStaff}</span>` : ''}
+            </div>
+
             <!-- Featured Initiatives & Products Chips on Card -->
-            <div class="mt-3 pt-3 border-t border-white/10 space-y-2">
+            <div class="mt-2 pt-2 border-t border-white/10 space-y-1.5">
               <!-- Initiatives -->
               <div class="flex items-center gap-1.5 flex-wrap">
                 <span class="text-[10px] text-indigo-300 font-semibold uppercase tracking-wider">Init:</span>
@@ -1827,7 +2083,7 @@
                   <i data-lucide="users" class="w-3 h-3 text-cyan-400"></i> ${conf.attendeesDisplay || conf.attendees}
                 </span>
                 <span>•</span>
-                <span class="text-slate-300 truncate max-w-[90px]" title="Lead: ${conf.leadManager}">
+                <span class="text-amber-300 truncate max-w-[100px]" title="Lead: ${conf.leadManager}">
                   👤 ${conf.leadManager ? conf.leadManager.split(' ')[0] : 'Lead'}
                 </span>
               </div>
@@ -1862,20 +2118,23 @@
               </div>
               <div>
                 <h4 class="font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">${conf.title}</h4>
-                <div class="mt-1 flex items-center gap-2">
+                <div class="mt-1 flex items-center gap-1.5 flex-wrap">
                   <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${conf.badgeGradient}">
                     <i data-lucide="${conf.categoryIcon || 'tag'}" class="w-3 h-3"></i>
                     ${conf.category}
+                  </span>
+                  <span class="text-[10px] font-bold text-purple-300 bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-800/50">
+                    ${conf.region || 'Americas'}
                   </span>
                 </div>
               </div>
             </div>
           </td>
 
-          <!-- Location & Stand -->
+          <!-- Region, Country & Venue -->
           <td class="px-5 py-4">
             <div>
-              <p class="font-semibold text-slate-200 text-xs">${conf.shortLocation}</p>
+              <p class="font-bold text-slate-200 text-xs">${conf.city}, ${conf.country}</p>
               <p class="text-[11px] text-slate-400 line-clamp-1">${conf.location}</p>
               <span class="inline-block mt-1 text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/50 px-2 py-0.5 rounded">
                 ${conf.boothStand || 'Hall Central'}
@@ -1893,6 +2152,18 @@
               <span class="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-cyan-950/80 text-cyan-300 border border-cyan-700/60">
                 ${fiscalCadence}
               </span>
+            </div>
+          </td>
+
+          <!-- Assigned Team (Lead & Staff) -->
+          <td class="px-5 py-4">
+            <div class="space-y-1">
+              <p class="text-xs font-semibold text-amber-300 flex items-center gap-1">
+                <i data-lucide="user-check" class="w-3 h-3 text-amber-400"></i> ${conf.leadManager || 'Lead'}
+              </p>
+              <div class="flex items-center gap-1 flex-wrap">
+                ${(conf.supportingStaff || []).map(s => `<span class="tag-staff text-[10px] px-1.5 py-0.5 rounded font-medium">${s}</span>`).join('')}
+              </div>
             </div>
           </td>
 
@@ -1922,25 +2193,13 @@
             </div>
           </td>
 
-          <!-- Metrics -->
-          <td class="px-5 py-4 text-center whitespace-nowrap">
-            <div class="inline-flex items-center gap-2.5 text-xs bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-xl">
-              <span title="Expected Attendees" class="font-semibold text-cyan-400 flex items-center gap-1">
-                <i data-lucide="users" class="w-3 h-3"></i>
-                ${conf.attendeesDisplay || conf.attendees}
-              </span>
-              <span class="text-slate-700">|</span>
-              <span title="Target Leads" class="text-emerald-400 font-semibold">${conf.targetLeads || 300} <span class="text-[10px] text-slate-400">leads</span></span>
-            </div>
-          </td>
-
           <!-- Actions -->
           <td class="px-5 py-4 text-right" onclick="event.stopPropagation()">
             <div class="flex items-center justify-end gap-1.5">
               <button 
                 onclick="openEditEventModal(${conf.id})" 
                 class="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-indigo-400 border border-slate-800 transition-colors"
-                title="Edit Logistics"
+                title="Edit Logistics & Staff"
               >
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
               </button>
@@ -1975,7 +2234,8 @@
       document.getElementById('modalImage').src = conf.image;
       document.getElementById('modalTitle').textContent = conf.title;
       document.getElementById('modalDates').textContent = conf.dates;
-      document.getElementById('modalLocation').textContent = conf.location;
+      document.getElementById('modalLocation').textContent = `${conf.location}`;
+      document.getElementById('modalHierarchy').textContent = `Region: ${conf.region || 'Americas'} • Country: ${conf.country} • City: ${conf.city}`;
       document.getElementById('modalDescription').textContent = conf.description;
       document.getElementById('modalBooth').textContent = conf.boothStand || 'Booth TBD';
       document.getElementById('modalStandVal').textContent = conf.boothStand || 'TBD';
@@ -1983,7 +2243,9 @@
       document.getElementById('modalLeadsVal').textContent = `${conf.targetLeads || 400} Leads`;
       document.getElementById('modalTierVal').textContent = conf.tier || 'Tier 1';
       document.getElementById('modalTier').textContent = conf.tier || 'Tier 1 Flagship';
-      document.getElementById('modalLeadBadge').textContent = `Lead: ${conf.leadManager || 'Unassigned'}`;
+      document.getElementById('modalRegionBadge').textContent = conf.region || 'Americas';
+      document.getElementById('modalLeadBadge').textContent = `Event Lead: ${conf.leadManager || 'Unassigned'}`;
+      document.getElementById('modalLeadSub').textContent = `Lead: ${conf.leadManager || 'Unassigned'}`;
       document.getElementById('modalCadenceBadge').textContent = getEventFiscalTag(conf.startDate);
       
       const badge = document.getElementById('modalBadge');
@@ -1993,6 +2255,16 @@
       const status = document.getElementById('modalStatus');
       status.className = `inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md border ${conf.statusColor || 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'} backdrop-blur-md`;
       status.textContent = conf.status;
+
+      // Supporting Staff
+      const staffContainer = document.getElementById('modalStaffList');
+      staffContainer.innerHTML = (conf.supportingStaff && conf.supportingStaff.length > 0)
+        ? conf.supportingStaff.map(st => `
+            <span class="tag-staff px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
+              <i data-lucide="user" class="w-3 h-3"></i> ${st}
+            </span>
+          `).join('')
+        : '<span class="text-xs text-slate-500">No supporting staff assigned yet</span>';
 
       // Initiatives
       const initContainer = document.getElementById('modalInitiatives');
@@ -2069,7 +2341,7 @@
 
       closeFiscalSettingsModal();
       render();
-      showToast('Fiscal Configuration Applied', `Fiscal start set to Month ${fiscalConfig.startMonth}/${fiscalConfig.startDay}, ref date ${fiscalConfig.referenceDate}`);
+      showToast('Fiscal Configuration Applied', `Fiscal start set to Month ${fiscalConfig.startMonth}/${fiscalConfig.startDay}`);
     }
 
     // Period Change Handler
@@ -2084,7 +2356,6 @@
       render();
     }
 
-    // Timeline Toggle (All, Future, Past)
     function setTimelineFilter(timeline) {
       currentTimelineFilter = timeline;
       const allBtn = document.getElementById('timelineAllBtn');
@@ -2106,7 +2377,6 @@
       render();
     }
 
-    // Date Interval Handlers
     function handleIntervalDateChange() {
       customStartDate = document.getElementById('intervalStartDate').value;
       customEndDate = document.getElementById('intervalEndDate').value;
@@ -2127,14 +2397,59 @@
       render();
     }
 
+    // Location & Staffing Handlers
+    function handleRegionChange(reg) {
+      currentRegionFilter = reg;
+      currentCountryFilter = 'all';
+      currentCityFilter = 'all';
+      populateLocationAndStaffDropdowns();
+      render();
+    }
+
+    function handleCountryChange(ctry) {
+      currentCountryFilter = ctry;
+      currentCityFilter = 'all';
+      populateLocationAndStaffDropdowns();
+      render();
+    }
+
+    function handleCityChange(cty) {
+      currentCityFilter = cty;
+      render();
+    }
+
+    function handleLeadChange(lead) {
+      currentLeadFilter = lead;
+      render();
+    }
+
+    function handleStaffChange(staff) {
+      currentStaffFilter = staff;
+      render();
+    }
+
+    function resetLocationStaffFilters() {
+      currentRegionFilter = 'all';
+      currentCountryFilter = 'all';
+      currentCityFilter = 'all';
+      currentLeadFilter = 'all';
+      currentStaffFilter = 'all';
+      document.getElementById('regionFilterSelect').value = 'all';
+      populateLocationAndStaffDropdowns();
+      render();
+    }
+
     // Add & Edit Form Controls
     function openAddEventModal() {
       document.getElementById('eventForm').reset();
       document.getElementById('formEventId').value = '';
       document.getElementById('formModalTitle').textContent = 'Add New Conference / Expo';
-      document.getElementById('formModalSubtitle').textContent = 'Configure logistics, featured initiatives, products & metadata';
+      document.getElementById('formModalSubtitle').textContent = 'Configure logistics, location hierarchy, staffing, initiatives & products';
       document.getElementById('eventFormStartDate').value = '2026-10-14';
       document.getElementById('eventFormImage').value = 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80';
+      document.getElementById('eventFormRegion').value = 'Americas';
+      document.getElementById('eventFormCountry').value = 'United States';
+      document.getElementById('eventFormCity').value = 'San Francisco';
       
       syncFormPresetButtons();
       openFormModalDirect();
@@ -2145,27 +2460,31 @@
       if (!conf) return;
 
       document.getElementById('formEventId').value = conf.id;
-      document.getElementById('formModalTitle').textContent = 'Edit Conference Logistics';
+      document.getElementById('formModalTitle').textContent = 'Edit Conference Logistics & Staffing';
       document.getElementById('formModalSubtitle').textContent = `Updating metadata for "${conf.title}"`;
       
       document.getElementById('eventFormTitle').value = conf.title;
       document.getElementById('eventFormCategory').value = conf.category;
       document.getElementById('eventFormTier').value = conf.tier || 'Tier 1 Flagship';
       document.getElementById('eventFormStatus').value = conf.status;
+      document.getElementById('eventFormRegion').value = conf.region || 'Americas';
+      document.getElementById('eventFormCountry').value = conf.country || '';
+      document.getElementById('eventFormCity').value = conf.city || '';
       document.getElementById('eventFormBooth').value = conf.boothStand || '';
       document.getElementById('eventFormLocation').value = conf.location;
-      document.getElementById('eventFormShortLocation').value = conf.shortLocation;
       document.getElementById('eventFormDates').value = conf.dates;
       document.getElementById('eventFormStartDate').value = conf.startDate || '2026-10-14';
       document.getElementById('eventFormInitiatives').value = (conf.initiatives || []).join(', ');
       document.getElementById('eventFormProducts').value = (conf.products || []).join(', ');
       document.getElementById('eventFormLead').value = conf.leadManager || '';
+      document.getElementById('eventFormSupportingStaff').value = (conf.supportingStaff || []).join(', ');
       document.getElementById('eventFormBudget').value = conf.budget || '';
       document.getElementById('eventFormTargetLeads').value = conf.targetLeads || 400;
       document.getElementById('eventFormAttendees').value = conf.attendees;
       document.getElementById('eventFormSpeakers').value = conf.speakers;
       document.getElementById('eventFormBooths').value = conf.booths;
       document.getElementById('eventFormImage').value = conf.image;
+      document.getElementById('eventFormDescription').value = conf.description;
 
       syncFormPresetButtons();
       openFormModalDirect();
@@ -2190,7 +2509,15 @@
       document.getElementById('eventForm').reset();
     }
 
-    // Quick Initiative & Product Tag Toggles in Form
+    function appendStaffMember(name) {
+      const input = document.getElementById('eventFormSupportingStaff');
+      let current = input.value.split(',').map(s => s.trim()).filter(Boolean);
+      if (!current.includes(name)) {
+        current.push(name);
+        input.value = current.join(', ');
+      }
+    }
+
     function toggleFormInitiativeTag(tag) {
       const input = document.getElementById('eventFormInitiatives');
       let tags = input.value.split(',').map(t => t.trim()).filter(Boolean);
@@ -2240,7 +2567,7 @@
       });
     }
 
-    // Save Event Form (Create or Update)
+    // Save Event Form
     function handleSaveEvent(e) {
       e.preventDefault();
 
@@ -2249,9 +2576,11 @@
       const category = document.getElementById('eventFormCategory').value;
       const tier = document.getElementById('eventFormTier').value;
       const status = document.getElementById('eventFormStatus').value;
+      const region = document.getElementById('eventFormRegion').value;
+      const country = document.getElementById('eventFormCountry').value.trim();
+      const city = document.getElementById('eventFormCity').value.trim();
       const boothStand = document.getElementById('eventFormBooth').value.trim() || 'Booth TBD';
       const location = document.getElementById('eventFormLocation').value.trim();
-      const shortLocation = document.getElementById('eventFormShortLocation').value.trim();
       const dates = document.getElementById('eventFormDates').value.trim();
       const startDate = document.getElementById('eventFormStartDate').value;
       const leadManager = document.getElementById('eventFormLead').value.trim() || 'Events Director';
@@ -2262,6 +2591,11 @@
       const booths = parseInt(document.getElementById('eventFormBooths').value, 10) || 100;
       const image = document.getElementById('eventFormImage').value.trim();
       const description = document.getElementById('eventFormDescription').value.trim();
+
+      const staffRaw = document.getElementById('eventFormSupportingStaff').value;
+      const supportingStaff = staffRaw 
+        ? staffRaw.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
 
       const rawInits = document.getElementById('eventFormInitiatives').value;
       const initiatives = rawInits ? rawInits.split(',').map(t => {
@@ -2283,7 +2617,6 @@
       };
 
       if (editId) {
-        // Update existing event
         const idx = conferences.findIndex(c => c.id === parseInt(editId, 10));
         if (idx !== -1) {
           conferences[idx] = {
@@ -2296,12 +2629,16 @@
             tier,
             status,
             statusColor: statusConfig[status] || 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+            region,
+            country,
+            city,
+            shortLocation: `${city}, ${country}`,
             boothStand,
             location,
-            shortLocation,
             dates,
             startDate,
             leadManager,
+            supportingStaff,
             budget,
             targetLeads,
             attendees,
@@ -2313,10 +2650,9 @@
             initiatives,
             products
           };
-          showToast('Logistics Updated', `"${title}" was updated successfully.`);
+          showToast('Conference Updated', `"${title}" updated successfully.`);
         }
       } else {
-        // Create new event
         const newEvent = {
           id: Date.now(),
           title,
@@ -2327,13 +2663,16 @@
           tier,
           status,
           statusColor: statusConfig[status] || 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+          region,
+          country,
+          city,
+          shortLocation: `${city}, ${country}`,
           boothStand,
           location,
-          shortLocation,
-          country: shortLocation.split(',').pop()?.trim() || 'Global',
           dates,
           startDate,
           leadManager,
+          supportingStaff,
           budget,
           targetLeads,
           attendees,
@@ -2347,7 +2686,7 @@
           bookmarked: false
         };
         conferences.unshift(newEvent);
-        showToast('Conference Published 🎉', `"${title}" is now live on your dashboard.`);
+        showToast('Conference Published 🎉', `"${title}" is now live.`);
       }
 
       closeFormModal();
@@ -2355,7 +2694,6 @@
       render();
     }
 
-    // Toggle Bookmark
     function toggleBookmark(id) {
       const conf = conferences.find(c => c.id === id);
       if (conf) {
@@ -2386,7 +2724,6 @@
       lucide.createIcons();
     }
 
-    // Delete Event
     function deleteEvent(id) {
       const conf = conferences.find(c => c.id === id);
       if (!conf) return;
@@ -2398,7 +2735,6 @@
       }
     }
 
-    // Category / Initiative / Product setters
     function setCategoryFilter(cat) {
       currentCategory = cat;
       renderFilters();
@@ -2417,7 +2753,6 @@
       render();
     }
 
-    // Search & Sort Handlers
     function handleSearch(val) {
       searchQuery = val.trim();
       render();
@@ -2435,18 +2770,23 @@
       currentProductFilter = 'all';
       currentPeriodFilter = 'all';
       currentTimelineFilter = 'all';
+      currentRegionFilter = 'all';
+      currentCountryFilter = 'all';
+      currentCityFilter = 'all';
+      currentLeadFilter = 'all';
+      currentStaffFilter = 'all';
       customStartDate = '';
       customEndDate = '';
       document.getElementById('searchInput').value = '';
       document.getElementById('periodFilterSelect').value = 'all';
       document.getElementById('intervalStartDate').value = '';
       document.getElementById('intervalEndDate').value = '';
+      document.getElementById('regionFilterSelect').value = 'all';
       setTimelineFilter('all');
       renderFilters();
       render();
     }
 
-    // View Mode Toggle
     function setViewMode(mode) {
       currentViewMode = mode;
       const gridBtn = document.getElementById('gridBtn');
@@ -2467,7 +2807,6 @@
       alert('Redirecting to the official conference registration portal.');
     }
 
-    // Toast Alert Trigger
     let toastTimeout;
     function showToast(title, message) {
       const toast = document.getElementById('toastNotification');
@@ -2503,7 +2842,6 @@
       }
     });
 
-    // Initial render on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       renderFilters();
       render();
