@@ -169,17 +169,17 @@
 
       <!-- Action Items & Profile -->
       <div class="flex items-center gap-3">
+        <!-- Fiscal Settings Trigger Button -->
+        <button onclick="openFiscalSettingsModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/80 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs font-medium transition-colors" title="Configure Fiscal Calendar Parameters">
+          <i data-lucide="calendar-cog" class="w-4 h-4 text-cyan-400"></i>
+          <span id="navFiscalBadge" class="hidden sm:inline text-[11px] font-mono text-cyan-300">FY26 Q4</span>
+        </button>
+
         <!-- Add Conference Button -->
         <button onclick="openAddEventModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-semibold text-xs tracking-wide shadow-md shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
           <span class="hidden sm:inline">Add Conference</span>
           <span class="sm:hidden">Add</span>
-        </button>
-
-        <!-- Notification Bell -->
-        <button class="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">
-          <i data-lucide="bell" class="w-5 h-5"></i>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-400 rounded-full ring-2 ring-[#070b14]"></span>
         </button>
 
         <!-- User Profile Avatar -->
@@ -204,44 +204,95 @@
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-slate-800/80">
         <div>
           <div class="flex items-center gap-2 mb-2">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-950/80 text-cyan-400 border border-cyan-800/50">
+            <span id="headerFiscalPill" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-950/80 text-cyan-400 border border-cyan-800/50">
               <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-              2026 - 2027 Season Active
+              FY26 Active (Starts Nov 1, 2025)
             </span>
-            <span class="text-xs text-slate-400">• Strategy & Logistics Hub</span>
+            <span class="text-xs text-slate-400">• Reference: Sep 03, 2026</span>
           </div>
           <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-white tracking-tight">
             Global Trade Shows & Conferences
           </h1>
           <p class="text-slate-400 text-sm mt-1.5 max-w-2xl">
-            Enterprise event management dashboard mapping strategic initiatives, featured products, booth logistics, and registration analytics.
+            Enterprise event management dashboard mapping strategic initiatives, featured products, booth logistics, and fiscal cadence.
           </p>
         </div>
 
         <!-- Quick Summary Metrics Counter -->
         <div class="grid grid-cols-4 gap-2.5 sm:gap-3 shrink-0">
           <div class="glass-panel px-3.5 py-2.5 rounded-2xl border border-slate-800">
-            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Active Expos</p>
-            <p id="metricTotalExpos" class="text-lg sm:text-xl font-bold font-sans text-white mt-0.5">9</p>
+            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Visible Expos</p>
+            <p id="metricTotalExpos" class="text-lg sm:text-xl font-bold font-sans text-white mt-0.5">0</p>
           </div>
           <div class="glass-panel px-3.5 py-2.5 rounded-2xl border border-slate-800">
             <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Total Reach</p>
-            <p id="metricTotalReach" class="text-lg sm:text-xl font-bold font-sans text-cyan-300 mt-0.5">93.5k</p>
+            <p id="metricTotalReach" class="text-lg sm:text-xl font-bold font-sans text-cyan-300 mt-0.5">0k</p>
           </div>
           <div class="glass-panel px-3.5 py-2.5 rounded-2xl border border-slate-800">
             <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Initiatives</p>
-            <p id="metricInitiativesCount" class="text-lg sm:text-xl font-bold font-sans text-indigo-300 mt-0.5">7</p>
+            <p id="metricInitiativesCount" class="text-lg sm:text-xl font-bold font-sans text-indigo-300 mt-0.5">0</p>
           </div>
           <div class="glass-panel px-3.5 py-2.5 rounded-2xl border border-slate-800">
             <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Products</p>
-            <p id="metricProductsCount" class="text-lg sm:text-xl font-bold font-sans text-emerald-300 mt-0.5">8</p>
+            <p id="metricProductsCount" class="text-lg sm:text-xl font-bold font-sans text-emerald-300 mt-0.5">0</p>
           </div>
         </div>
       </div>
 
-      <!-- Controls & Filter Toolbar -->
-      <div class="space-y-3 mt-6">
+      <!-- Controls & Multi-tier Filter Toolbar -->
+      <div class="space-y-3.5 mt-6">
         
+        <!-- NEW: Fiscal & Calendar Temporal Filter Bar + Past vs Future Toggle -->
+        <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          
+          <!-- Period Selector Dropdown & Timeline Toggle -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- Period Preset Selector -->
+            <div class="flex items-center gap-1.5 text-xs text-slate-300">
+              <i data-lucide="calendar-range" class="w-4 h-4 text-cyan-400"></i>
+              <span class="font-semibold text-slate-200">Period:</span>
+              <select id="periodFilterSelect" onchange="handlePeriodChange(this.value)" class="bg-slate-950 border border-slate-700/80 text-cyan-300 font-semibold text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                <option value="all">All Time (Unrestricted)</option>
+                <option value="current-fy" selected>Current Fiscal Year (FY26: Nov '25 - Oct '26)</option>
+                <option value="current-fq">Current Fiscal Quarter (FY26 Q4: Aug - Oct '26)</option>
+                <option value="current-cy">Current Calendar Year (CY 2026)</option>
+                <option value="current-cq">Current Calendar Quarter (CY Q3: Jul - Sep '26)</option>
+                <option value="current-cm">Current Calendar Month (Sep 2026)</option>
+                <option value="next-fy">Next Fiscal Year (FY27: Nov '26 - Oct '27)</option>
+                <option value="custom">Custom Date Interval...</option>
+              </select>
+            </div>
+
+            <!-- Past vs Future Toggle -->
+            <div class="flex items-center bg-slate-950 border border-slate-700/80 rounded-xl p-0.5 text-xs">
+              <button onclick="setTimelineFilter('all')" id="timelineAllBtn" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors">
+                All
+              </button>
+              <button onclick="setTimelineFilter('future')" id="timelineFutureBtn" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold transition-colors">
+                Upcoming / Future
+              </button>
+              <button onclick="setTimelineFilter('past')" id="timelinePastBtn" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors">
+                Past Events
+              </button>
+            </div>
+          </div>
+
+          <!-- Date Interval Custom Range Pickers -->
+          <div id="dateIntervalPickerGroup" class="flex items-center gap-2 text-xs">
+            <span class="text-slate-400 text-[11px]">Interval:</span>
+            <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-700/80 rounded-xl px-2.5 py-1 text-slate-200">
+              <span class="text-[10px] text-slate-400">From</span>
+              <input type="date" id="intervalStartDate" onchange="handleIntervalDateChange()" class="bg-transparent text-xs text-cyan-300 focus:outline-none">
+              <span class="text-[10px] text-slate-400">To</span>
+              <input type="date" id="intervalEndDate" onchange="handleIntervalDateChange()" class="bg-transparent text-xs text-cyan-300 focus:outline-none">
+            </div>
+            <button onclick="clearCustomDateInterval()" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors" title="Clear Date Interval">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+        </div>
+
         <!-- Primary Filter Row: Category Pills & Mode Switcher -->
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           <!-- Category Filter Pills -->
@@ -306,7 +357,7 @@
       <span class="text-slate-400">Active Criteria:</span>
       <div id="activeTagsContainer" class="flex items-center gap-2 flex-wrap"></div>
       <button onclick="resetFilters()" class="ml-auto text-[11px] text-rose-400 hover:text-rose-300 font-medium underline">
-        Clear All
+        Clear All Filters
       </button>
     </div>
 
@@ -324,7 +375,7 @@
               <tr>
                 <th scope="col" class="px-5 py-4">Event & Category</th>
                 <th scope="col" class="px-5 py-4">Location & Stand #</th>
-                <th scope="col" class="px-5 py-4">Timeline</th>
+                <th scope="col" class="px-5 py-4">Timeline & Cadence</th>
                 <th scope="col" class="px-5 py-4">Featured Initiatives & Products</th>
                 <th scope="col" class="px-5 py-4">Status & Tier</th>
                 <th scope="col" class="px-5 py-4 text-center">Metrics</th>
@@ -345,13 +396,66 @@
         <i data-lucide="calendar-x" class="w-8 h-8"></i>
       </div>
       <h3 class="text-lg font-semibold text-slate-200 font-sans">No conferences match your criteria</h3>
-      <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Try clearing your filters, initiative tags, or search query.</p>
+      <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Try clearing your filters, initiative tags, temporal period, or search query.</p>
       <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-xl text-xs font-semibold transition-colors">
         Reset All Filters
       </button>
     </div>
 
   </main>
+
+  <!-- Fiscal Settings Modal -->
+  <div id="fiscalSettingsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div id="fiscalSettingsContent" class="glass-panel border border-slate-700/80 rounded-3xl max-w-lg w-full p-6 sm:p-8 transform scale-95 transition-transform duration-300 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+            <i data-lucide="calendar-cog" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Fiscal Calendar Configuration</h3>
+            <p class="text-xs text-slate-400">Configure corporate fiscal cadence parameters</p>
+          </div>
+        </div>
+        <button onclick="closeFiscalSettingsModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="mt-5 space-y-4 text-xs">
+        <div class="p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-800/60 text-cyan-200">
+          <p class="font-bold flex items-center gap-1.5"><i data-lucide="info" class="w-3.5 h-3.5"></i> Current Configuration Rule</p>
+          <p class="mt-1 text-slate-300">Fiscal Year starts on <strong>November 1st</strong>. For reference year 2026, FY26 spans <strong>Nov 1, 2025 – Oct 31, 2026</strong>. Today (Sep 3, 2026) is in <strong>FY26 Q4</strong>.</p>
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-slate-300 mb-1">Fiscal Year Start Month & Day</label>
+          <div class="grid grid-cols-2 gap-3">
+            <select id="configFiscalMonth" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-slate-200">
+              <option value="11" selected>November (Month 11)</option>
+              <option value="1">January (Month 1 - Calendar alignment)</option>
+              <option value="2">February (Month 2)</option>
+              <option value="4">April (Month 4 - UK alignment)</option>
+              <option value="7">July (Month 7 - US Govt alignment)</option>
+              <option value="10">October (Month 10 - US Fed alignment)</option>
+            </select>
+            <input type="number" id="configFiscalDay" value="1" min="1" max="31" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-slate-200">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-slate-300 mb-1">Current Reference Date ("Today")</label>
+          <input type="date" id="configReferenceDate" value="2026-09-03" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-slate-200">
+          <p class="text-[11px] text-slate-400 mt-1">Used to evaluate past vs. future events and current quarter/month boundaries.</p>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-2.5">
+          <button onclick="closeFiscalSettingsModal()" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white">Cancel</button>
+          <button onclick="saveFiscalSettings()" class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-lg shadow-cyan-500/20">Apply & Recalculate</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Add / Edit Conference Modal -->
   <div id="eventFormModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
@@ -430,6 +534,7 @@
               <option value="Selling Fast">Selling Fast</option>
               <option value="Keynote Announced">Keynote Announced</option>
               <option value="Call for Papers">Call for Papers</option>
+              <option value="Completed">Completed / Past</option>
             </select>
           </div>
         </div>
@@ -489,7 +594,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-              Start Date (Sort Chronology) <span class="text-rose-400">*</span>
+              Start Date (Chronology & Cadence) <span class="text-rose-400">*</span>
             </label>
             <input 
               type="date" 
@@ -699,7 +804,8 @@
         <div class="absolute bottom-4 left-6 right-6">
           <div class="flex items-center gap-2 mb-1.5">
             <span id="modalStatus" class="inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md"></span>
-            <span id="modalBooth" class="text-xs text-cyan-300 bg-cyan-950/70 border border-cyan-800/60 px-2 py-0.5 rounded-md font-mono"></span>
+            <span id="modalCadenceBadge" class="text-[10px] text-cyan-300 bg-cyan-950/80 border border-cyan-800/60 px-2 py-0.5 rounded-md font-mono"></span>
+            <span id="modalBooth" class="text-xs text-slate-300 bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 rounded-md font-mono"></span>
           </div>
           <h2 id="modalTitle" class="text-2xl sm:text-3xl font-bold font-sans text-white leading-tight"></h2>
         </div>
@@ -831,8 +937,114 @@
 
   <!-- Interactive JavaScript Logic & Data -->
   <script>
-    // Initial 9 Curated Trade Show / Conference Data Models with Event Management Metadata, Initiatives & Products
+    // Configurable Fiscal Calendar & Reference Settings (Hardcoded defaults as specified, configurable via modal/localStorage)
+    let fiscalConfig = {
+      startMonth: 11, // November (Month 11)
+      startDay: 1,    // 1st of November
+      referenceDate: '2026-09-03' // Current local reference timestamp
+    };
+
+    // Load saved fiscal configuration from localStorage if available
+    try {
+      const savedConfig = localStorage.getItem('nexusexpo_fiscal_config');
+      if (savedConfig) {
+        fiscalConfig = { ...fiscalConfig, ...JSON.parse(savedConfig) };
+      }
+    } catch(e) {}
+
+    // Comprehensive 12 Curated Conferences spanning Past & Future across FY26 and FY27
     let conferences = [
+      // 1. Past Event in FY26 Q2 (March 2026)
+      {
+        id: 101,
+        title: "MWC Global Mobile & Carrier Congress 2026",
+        category: "Mobility",
+        categoryIcon: "zap",
+        badgeGradient: "from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40",
+        badgeGlow: "shadow-amber-500/20",
+        location: "Fira Gran Via, Barcelona, Spain",
+        shortLocation: "Barcelona, Spain",
+        country: "Spain",
+        dates: "Mar 02 - 05, 2026",
+        startDate: "2026-03-02",
+        attendees: 28000,
+        attendeesDisplay: "28.0k",
+        speakers: 210,
+        booths: 650,
+        status: "Completed",
+        statusColor: "bg-slate-700/40 text-slate-300 border-slate-600/40",
+        tier: "Tier 1 Flagship",
+        boothStand: "Hall 3 — Stand #3K12",
+        leadManager: "Marcus Vance",
+        budget: "$250,000",
+        targetLeads: 950,
+        initiatives: ["#carriers", "#tsn", "#sovereign cloud"],
+        products: ["#AresONE-1600GE", "#APS-100/400G", "#CyPerf"],
+        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80",
+        description: "The world's largest gathering for mobile telecommunication ecosystem, 6G research, optical interconnects, and carrier cloud infrastructure.",
+        bookmarked: false
+      },
+      // 2. Past Event in FY26 Q4 (August 2026)
+      {
+        id: 102,
+        title: "Black Hat Security USA & DefCon Forum 2026",
+        category: "Cybersecurity",
+        categoryIcon: "shield-alert",
+        badgeGradient: "from-red-500/20 to-violet-500/20 text-red-300 border-red-500/40",
+        badgeGlow: "shadow-red-500/20",
+        location: "Mandalay Bay Convention Center, Las Vegas, NV",
+        shortLocation: "Las Vegas, NV",
+        country: "USA",
+        dates: "Aug 08 - 13, 2026",
+        startDate: "2026-08-08",
+        attendees: 19500,
+        attendeesDisplay: "19.5k",
+        speakers: 180,
+        booths: 390,
+        status: "Completed",
+        statusColor: "bg-slate-700/40 text-slate-300 border-slate-600/40",
+        tier: "Tier 1 Flagship",
+        boothStand: "Oceanside — Booth #1402",
+        leadManager: "Kiran Patel",
+        budget: "$220,000",
+        targetLeads: 820,
+        initiatives: ["#cybersecurity", "#sovereign cloud", "#ai"],
+        products: ["#BreakingPoint", "#CyberRange", "#CyPerf"],
+        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
+        description: "Premier technical information security conference providing attendees with the very latest in research, development, and exploit countermeasures.",
+        bookmarked: true
+      },
+      // 3. Current Calendar Month & FY26 Q4 Event (September 2026)
+      {
+        id: 103,
+        title: "AI Hardware & Edge Silicon Summit 2026",
+        category: "AI & Robotics",
+        categoryIcon: "cpu",
+        badgeGradient: "from-purple-500/20 to-indigo-500/20 text-purple-300 border-purple-500/40",
+        badgeGlow: "shadow-purple-500/20",
+        location: "Santa Clara Convention Center, Santa Clara, CA",
+        shortLocation: "Santa Clara, CA",
+        country: "USA",
+        dates: "Sep 15 - 17, 2026",
+        startDate: "2026-09-15",
+        attendees: 6800,
+        attendeesDisplay: "6.8k",
+        speakers: 90,
+        booths: 160,
+        status: "Selling Fast",
+        statusColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+        tier: "Tier 2 Strategic",
+        boothStand: "Hall A — Booth #504",
+        leadManager: "Sarah Jenkins",
+        budget: "$95,000",
+        targetLeads: 380,
+        initiatives: ["#ai", "#industrial", "#tsn"],
+        products: ["#KAI-IB", "#KAI-DCB", "#AresONE-1600GE"],
+        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
+        description: "Focusing on enterprise AI hardware acceleration, neural processing units, wafer-scale chips, and low-latency interconnects.",
+        bookmarked: true
+      },
+      // 4. Future FY26 Q4 Event (October 2026)
       {
         id: 1,
         title: "Global AI & Robotics Summit 2026",
@@ -862,6 +1074,7 @@
         description: "The world's premier forum on Autonomous Systems, Frontier LLMs, Embodied AI, and Humanoid Robotics. Gathering top laboratory researchers, enterprise pioneers, and hardware developers.",
         bookmarked: true
       },
+      // 5. Future FY27 Event (Nov 2026)
       {
         id: 2,
         title: "FinTech Disrupt World Congress",
@@ -891,6 +1104,7 @@
         description: "Unlocking the next wave of Cross-Border Settlement, Decentralized Capital Markets, Algorithmic Risk, and Autonomous Banking infrastructure.",
         bookmarked: false
       },
+      // 6. Future FY27 Event (Nov 2026)
       {
         id: 3,
         title: "BioHealth & MedTech International",
@@ -920,6 +1134,7 @@
         description: "Accelerating clinical breakthroughs in CRISPR therapeutics, AI-generated oncology drugs, robotic micro-surgery, and next-gen biometric diagnostic wearables.",
         bookmarked: false
       },
+      // 7. Future FY27 Event (Dec 2026)
       {
         id: 4,
         title: "NextGen Auto & Electric Mobility Expo",
@@ -949,6 +1164,7 @@
         description: "Europe's most influential automotive trade show showcasing Solid-State Battery tech, Autonomous Level 4 fleet platforms, and ultra-fast Megawatt charging infrastructure.",
         bookmarked: true
       },
+      // 8. Future FY27 Event (Jan 2027)
       {
         id: 5,
         title: "CleanEnergy & Climate Solutions Expo",
@@ -978,6 +1194,7 @@
         description: "Uniting clean tech founders, sovereign climate funds, and grid operators to scale direct air capture, offshore wind megastructures, and fusion power prototypes.",
         bookmarked: false
       },
+      // 9. Future FY27 Event (Jan 2027)
       {
         id: 6,
         title: "CloudScale & DevOps Architecture Expo",
@@ -1007,6 +1224,7 @@
         description: "The global gathering for Site Reliability Engineers, Kubernetes architects, Platform engineers, and Distributed Systems innovators.",
         bookmarked: true
       },
+      // 10. Future FY27 Event (Feb 2027)
       {
         id: 7,
         title: "CyberShield Global Defense Forum",
@@ -1036,6 +1254,7 @@
         description: "Intelligence officers, CISOs, and ethical red teams meet to counter nation-state cyber threats, quantum decryption, and AI-driven social engineering vectors.",
         bookmarked: false
       },
+      // 11. Future FY27 Event (Mar 2027)
       {
         id: 8,
         title: "DesignOps & Creative Frontiers Summit",
@@ -1065,6 +1284,7 @@
         description: "Exploring Spatial UX for XR hardware, generative UI design systems, brand synthesis, and human-centered design in the age of autonomous agents.",
         bookmarked: false
       },
+      // 12. Future FY27 Event (Mar 2027)
       {
         id: 9,
         title: "SpaceTech & Commercial Aerospace Expo",
@@ -1099,6 +1319,10 @@
     let currentCategory = 'all';
     let currentInitiativeFilter = 'all';
     let currentProductFilter = 'all';
+    let currentPeriodFilter = 'all'; // Default to all time so all 12 events are visible initially
+    let currentTimelineFilter = 'all'; // 'all', 'future', 'past'
+    let customStartDate = '';
+    let customEndDate = '';
     let searchQuery = '';
     let currentSort = 'date-asc';
     let currentViewMode = 'grid'; // 'grid' or 'table'
@@ -1123,19 +1347,168 @@
       'Early Bird Tier': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
       'Selling Fast': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
       'Keynote Announced': 'bg-purple-500/20 text-purple-300 border-purple-500/40',
-      'Call for Papers': 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+      'Call for Papers': 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+      'Completed': 'bg-slate-700/40 text-slate-300 border-slate-600/40'
     };
 
-    // Update Header Metric KPIs
-    function updateMetrics() {
-      const totalAttendees = conferences.reduce((sum, c) => sum + (c.attendees || 0), 0);
-      const allInitiatives = new Set(conferences.flatMap(c => c.initiatives || []));
-      const allProducts = new Set(conferences.flatMap(c => c.products || []));
+    // Helper: Compute Fiscal & Calendar Boundaries
+    function getCadenceBoundaries() {
+      const ref = new Date(fiscalConfig.referenceDate);
+      const refYear = ref.getFullYear();
+      const refMonth = ref.getMonth() + 1; // 1-12
+      const refDay = ref.getDate();
 
-      document.getElementById('metricTotalExpos').textContent = conferences.length;
+      // FY begins Nov 1st (month 11).
+      // If current month >= 11, then current FY is (refYear + 1). E.g. Nov 2025 is FY26.
+      // If current month < 11, then current FY is refYear. E.g. Sep 2026 is FY26.
+      const currentFY = (refMonth >= fiscalConfig.startMonth) ? (refYear + 1) : refYear;
+
+      // FY start date & end date
+      const fyStart = new Date(currentFY - 1, fiscalConfig.startMonth - 1, fiscalConfig.startDay);
+      const fyEnd = new Date(currentFY, fiscalConfig.startMonth - 1, 0, 23, 59, 59); // Last day of October
+
+      // FY Quarters (3-month segments):
+      // Q1: Nov - Jan
+      // Q2: Feb - Apr
+      // Q3: May - Jul
+      // Q4: Aug - Oct
+      let fqNum = 1;
+      let fqStart, fqEnd;
+      if (ref >= new Date(currentFY - 1, 10, 1) && ref <= new Date(currentFY, 0, 31, 23, 59, 59)) {
+        fqNum = 1;
+        fqStart = new Date(currentFY - 1, 10, 1);
+        fqEnd = new Date(currentFY, 0, 31, 23, 59, 59);
+      } else if (ref >= new Date(currentFY, 1, 1) && ref <= new Date(currentFY, 3, 30, 23, 59, 59)) {
+        fqNum = 2;
+        fqStart = new Date(currentFY, 1, 1);
+        fqEnd = new Date(currentFY, 3, 30, 23, 59, 59);
+      } else if (ref >= new Date(currentFY, 4, 1) && ref <= new Date(currentFY, 6, 31, 23, 59, 59)) {
+        fqNum = 3;
+        fqStart = new Date(currentFY, 4, 1);
+        fqEnd = new Date(currentFY, 6, 31, 23, 59, 59);
+      } else {
+        fqNum = 4;
+        fqStart = new Date(currentFY, 7, 1);
+        fqEnd = new Date(currentFY, 9, 31, 23, 59, 59);
+      }
+
+      // Next Fiscal Year:
+      const nextFY = currentFY + 1;
+      const nextFYStart = new Date(currentFY, fiscalConfig.startMonth - 1, fiscalConfig.startDay);
+      const nextFYEnd = new Date(nextFY, fiscalConfig.startMonth - 1, 0, 23, 59, 59);
+
+      // Calendar Year (CY)
+      const cyStart = new Date(refYear, 0, 1);
+      const cyEnd = new Date(refYear, 11, 31, 23, 59, 59);
+
+      // Calendar Quarter (CQ)
+      const cqNum = Math.floor((refMonth - 1) / 3) + 1;
+      const cqStart = new Date(refYear, (cqNum - 1) * 3, 1);
+      const cqEnd = new Date(refYear, cqNum * 3, 0, 23, 59, 59);
+
+      // Calendar Month (CM)
+      const cmStart = new Date(refYear, refMonth - 1, 1);
+      const cmEnd = new Date(refYear, refMonth, 0, 23, 59, 59);
+
+      return {
+        currentFY,
+        fqNum,
+        fyStart,
+        fyEnd,
+        fqStart,
+        fqEnd,
+        nextFY,
+        nextFYStart,
+        nextFYEnd,
+        cyStart,
+        cyEnd,
+        cqNum,
+        cqStart,
+        cqEnd,
+        cmStart,
+        cmEnd
+      };
+    }
+
+    // Returns event Cadence Pill (e.g. "FY26 Q4" or "FY27 Q1")
+    function getEventFiscalTag(dateString) {
+      const d = new Date(dateString);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const fy = (m >= fiscalConfig.startMonth) ? (y + 1) : y;
+      
+      let q = 4;
+      if (m >= 11 || m === 1) q = 1;
+      else if (m >= 2 && m <= 4) q = 2;
+      else if (m >= 5 && m <= 7) q = 3;
+      else q = 4;
+
+      return `FY${fy.toString().slice(-2)} Q${q}`;
+    }
+
+    // Check if event start date falls within active period filter
+    function checkDateInPeriod(dateString) {
+      if (currentPeriodFilter === 'all' && !customStartDate && !customEndDate) return true;
+
+      const d = new Date(dateString);
+      const bounds = getCadenceBoundaries();
+
+      if (customStartDate || customEndDate) {
+        if (customStartDate && d < new Date(customStartDate)) return false;
+        if (customEndDate && d > new Date(customEndDate + 'T23:59:59')) return false;
+        return true;
+      }
+
+      switch(currentPeriodFilter) {
+        case 'current-fy':
+          return d >= bounds.fyStart && d <= bounds.fyEnd;
+        case 'current-fq':
+          return d >= bounds.fqStart && d <= bounds.fqEnd;
+        case 'current-cy':
+          return d >= bounds.cyStart && d <= bounds.cyEnd;
+        case 'current-cq':
+          return d >= bounds.cqStart && d <= bounds.cqEnd;
+        case 'current-cm':
+          return d >= bounds.cmStart && d <= bounds.cmEnd;
+        case 'next-fy':
+          return d >= bounds.nextFYStart && d <= bounds.nextFYEnd;
+        case 'all':
+        default:
+          return true;
+      }
+    }
+
+    // Check Timeline Filter (Past vs. Future relative to reference date)
+    function checkTimeline(dateString) {
+      if (currentTimelineFilter === 'all') return true;
+      const d = new Date(dateString);
+      const ref = new Date(fiscalConfig.referenceDate);
+      if (currentTimelineFilter === 'future') {
+        return d >= ref;
+      } else if (currentTimelineFilter === 'past') {
+        return d < ref;
+      }
+      return true;
+    }
+
+    // Update Header Metric KPIs
+    function updateMetrics(visibleData) {
+      const dataToCount = visibleData || getProcessedData();
+      const totalAttendees = dataToCount.reduce((sum, c) => sum + (c.attendees || 0), 0);
+      const allInitiatives = new Set(dataToCount.flatMap(c => c.initiatives || []));
+      const allProducts = new Set(dataToCount.flatMap(c => c.products || []));
+
+      document.getElementById('metricTotalExpos').textContent = dataToCount.length;
       document.getElementById('metricTotalReach').textContent = `${(totalAttendees / 1000).toFixed(1)}k`;
       document.getElementById('metricInitiativesCount').textContent = allInitiatives.size;
       document.getElementById('metricProductsCount').textContent = allProducts.size;
+
+      const bounds = getCadenceBoundaries();
+      document.getElementById('navFiscalBadge').textContent = `FY${bounds.currentFY.toString().slice(-2)} Q${bounds.fqNum}`;
+      document.getElementById('headerFiscalPill').innerHTML = `
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+        FY${bounds.currentFY.toString().slice(-2)} Q${bounds.fqNum} Active (Fiscal Start Nov 1)
+      `;
     }
 
     // Render Filter Bars
@@ -1148,7 +1521,7 @@
         const isActive = currentCategory === cat;
         const count = cat === 'all' ? conferences.length : conferences.filter(c => c.category === cat).length;
         const cfg = categoryConfig[cat];
-        const label = cat === 'all' ? `All Conferences (${count})` : `${cfg ? cfg.emoji : '🏷️'} ${cat} (${count})`;
+        const label = cat === 'all' ? `All Categories (${count})` : `${cfg ? cfg.emoji : '🏷️'} ${cat} (${count})`;
         
         return `
           <button 
@@ -1212,6 +1585,17 @@
       const container = document.getElementById('activeTagsContainer');
       
       let badges = [];
+      if (currentPeriodFilter !== 'all') {
+        const sel = document.getElementById('periodFilterSelect');
+        const text = sel.options[sel.selectedIndex].text.split('(')[0].trim();
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-700">Period: <strong>${text}</strong></span>`);
+      }
+      if (currentTimelineFilter !== 'all') {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-700">Timeline: <strong>${currentTimelineFilter === 'future' ? 'Upcoming Only' : 'Past Only'}</strong></span>`);
+      }
+      if (customStartDate || customEndDate) {
+        badges.push(`<span class="px-2 py-0.5 rounded-md bg-purple-950 text-purple-300 border border-purple-700">Dates: <strong>${customStartDate || '...'} → ${customEndDate || '...'}</strong></span>`);
+      }
       if (currentCategory !== 'all') {
         badges.push(`<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-200 border border-slate-700">Category: <strong>${currentCategory}</strong></span>`);
       }
@@ -1234,27 +1618,15 @@
       }
     }
 
-    function setCategoryFilter(cat) {
-      currentCategory = cat;
-      renderFilters();
-      render();
-    }
-
-    function setInitiativeFilter(init) {
-      currentInitiativeFilter = init;
-      renderFilters();
-      render();
-    }
-
-    function setProductFilter(prod) {
-      currentProductFilter = prod;
-      renderFilters();
-      render();
-    }
-
     // Processed Data (Filtered + Sorted)
     function getProcessedData() {
       let filtered = conferences.filter(conf => {
+        // Temporal / Period match
+        if (!checkDateInPeriod(conf.startDate)) return false;
+
+        // Past vs Future timeline match
+        if (!checkTimeline(conf.startDate)) return false;
+
         // Category Match
         const matchesCategory = currentCategory === 'all' || conf.category === currentCategory;
 
@@ -1299,7 +1671,8 @@
       const tableContainer = document.getElementById('tableViewContainer');
       const tableBody = document.getElementById('tableBody');
 
-      updateMetrics();
+      updateMetrics(data);
+      updateActiveFilterBar();
 
       if (data.length === 0) {
         cardsContainer.innerHTML = '';
@@ -1336,15 +1709,18 @@
         const topProducts = (conf.products || []).slice(0, 2);
         const remainingProd = (conf.products || []).length - 2;
 
+        const fiscalCadence = getEventFiscalTag(conf.startDate);
+        const isPast = new Date(conf.startDate) < new Date(fiscalConfig.referenceDate);
+
         return `
-        <div class="event-card group relative h-[520px] rounded-3xl overflow-hidden cursor-pointer border border-slate-700/60 hover:border-cyan-500/60 shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card-hover flex flex-col justify-between" onclick="openModal(${conf.id})">
+        <div class="event-card group relative h-[530px] rounded-3xl overflow-hidden cursor-pointer border border-slate-700/60 hover:border-cyan-500/60 shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card-hover flex flex-col justify-between" onclick="openModal(${conf.id})">
           
           <!-- Background Photographic Image with Zoom Effect -->
           <div class="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
             <img 
               src="${conf.image}" 
               alt="${conf.title}" 
-              class="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-110"
+              class="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-110 ${isPast ? 'grayscale-[35%] opacity-85' : ''}"
               loading="lazy"
             />
           </div>
@@ -1360,9 +1736,14 @@
                 <i data-lucide="${conf.categoryIcon || 'tag'}" class="w-3.5 h-3.5"></i>
                 <span class="text-xs font-bold tracking-wide">${conf.category}</span>
               </div>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-900/90 text-amber-300 border border-amber-500/40 w-fit backdrop-blur-md">
-                ${conf.tier || 'Tier 1 Flagship'}
-              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-900/90 text-amber-300 border border-amber-500/40 w-fit backdrop-blur-md">
+                  ${conf.tier || 'Tier 1 Flagship'}
+                </span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-cyan-950/90 text-cyan-300 border border-cyan-700/50 backdrop-blur-md">
+                  ${fiscalCadence}
+                </span>
+              </div>
             </div>
 
             <!-- Card Actions -->
@@ -1452,7 +1833,7 @@
               </div>
               <div class="inline-flex items-center gap-1 text-cyan-400 font-semibold group-hover:translate-x-1 transition-transform text-xs">
                 <span>Details</span>
-                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </div>
             </div>
 
@@ -1468,7 +1849,9 @@
     // Render Table View
     function renderTableView(data) {
       const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = data.map(conf => `
+      tbody.innerHTML = data.map(conf => {
+        const fiscalCadence = getEventFiscalTag(conf.startDate);
+        return `
         <tr class="hover:bg-slate-800/40 transition-colors group cursor-pointer" onclick="openModal(${conf.id})">
           
           <!-- Event & Thumbnail -->
@@ -1500,11 +1883,16 @@
             </div>
           </td>
 
-          <!-- Timeline -->
+          <!-- Timeline & Fiscal Cadence -->
           <td class="px-5 py-4 whitespace-nowrap">
-            <div class="flex items-center gap-1.5 text-slate-200 text-xs font-medium">
-              <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i>
-              <span>${conf.dates}</span>
+            <div class="space-y-1">
+              <div class="flex items-center gap-1.5 text-slate-200 text-xs font-medium">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i>
+                <span>${conf.dates}</span>
+              </div>
+              <span class="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-cyan-950/80 text-cyan-300 border border-cyan-700/60">
+                ${fiscalCadence}
+              </span>
             </div>
           </td>
 
@@ -1574,7 +1962,8 @@
           </td>
 
         </tr>
-      `).join('');
+      `;
+      }).join('');
     }
 
     // Modal Details Deep-Dive View
@@ -1595,6 +1984,7 @@
       document.getElementById('modalTierVal').textContent = conf.tier || 'Tier 1';
       document.getElementById('modalTier').textContent = conf.tier || 'Tier 1 Flagship';
       document.getElementById('modalLeadBadge').textContent = `Lead: ${conf.leadManager || 'Unassigned'}`;
+      document.getElementById('modalCadenceBadge').textContent = getEventFiscalTag(conf.startDate);
       
       const badge = document.getElementById('modalBadge');
       badge.className = `glass-badge px-3 py-1.5 rounded-full border ${conf.badgeGradient || 'from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/40'} flex items-center gap-1.5 shadow-md`;
@@ -1646,13 +2036,104 @@
       }
     }
 
+    // Fiscal Settings Modal Handlers
+    function openFiscalSettingsModal() {
+      document.getElementById('configFiscalMonth').value = fiscalConfig.startMonth;
+      document.getElementById('configFiscalDay').value = fiscalConfig.startDay;
+      document.getElementById('configReferenceDate').value = fiscalConfig.referenceDate;
+
+      const modal = document.getElementById('fiscalSettingsModal');
+      const content = document.getElementById('fiscalSettingsContent');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      lucide.createIcons();
+    }
+
+    function closeFiscalSettingsModal() {
+      const modal = document.getElementById('fiscalSettingsModal');
+      const content = document.getElementById('fiscalSettingsContent');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+    }
+
+    function saveFiscalSettings() {
+      fiscalConfig.startMonth = parseInt(document.getElementById('configFiscalMonth').value, 10);
+      fiscalConfig.startDay = parseInt(document.getElementById('configFiscalDay').value, 10);
+      fiscalConfig.referenceDate = document.getElementById('configReferenceDate').value;
+
+      try {
+        localStorage.setItem('nexusexpo_fiscal_config', JSON.stringify(fiscalConfig));
+      } catch(e) {}
+
+      closeFiscalSettingsModal();
+      render();
+      showToast('Fiscal Configuration Applied', `Fiscal start set to Month ${fiscalConfig.startMonth}/${fiscalConfig.startDay}, ref date ${fiscalConfig.referenceDate}`);
+    }
+
+    // Period Change Handler
+    function handlePeriodChange(val) {
+      currentPeriodFilter = val;
+      if (val !== 'custom') {
+        customStartDate = '';
+        customEndDate = '';
+        document.getElementById('intervalStartDate').value = '';
+        document.getElementById('intervalEndDate').value = '';
+      }
+      render();
+    }
+
+    // Timeline Toggle (All, Future, Past)
+    function setTimelineFilter(timeline) {
+      currentTimelineFilter = timeline;
+      const allBtn = document.getElementById('timelineAllBtn');
+      const futureBtn = document.getElementById('timelineFutureBtn');
+      const pastBtn = document.getElementById('timelinePastBtn');
+
+      allBtn.className = timeline === 'all' 
+        ? 'px-2.5 py-1 rounded-lg bg-slate-800 text-white font-semibold transition-colors' 
+        : 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors';
+
+      futureBtn.className = timeline === 'future'
+        ? 'px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold transition-colors'
+        : 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors';
+
+      pastBtn.className = timeline === 'past'
+        ? 'px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold transition-colors'
+        : 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition-colors';
+
+      render();
+    }
+
+    // Date Interval Handlers
+    function handleIntervalDateChange() {
+      customStartDate = document.getElementById('intervalStartDate').value;
+      customEndDate = document.getElementById('intervalEndDate').value;
+      if (customStartDate || customEndDate) {
+        document.getElementById('periodFilterSelect').value = 'custom';
+        currentPeriodFilter = 'custom';
+      }
+      render();
+    }
+
+    function clearCustomDateInterval() {
+      customStartDate = '';
+      customEndDate = '';
+      document.getElementById('intervalStartDate').value = '';
+      document.getElementById('intervalEndDate').value = '';
+      document.getElementById('periodFilterSelect').value = 'all';
+      currentPeriodFilter = 'all';
+      render();
+    }
+
     // Add & Edit Form Controls
     function openAddEventModal() {
       document.getElementById('eventForm').reset();
       document.getElementById('formEventId').value = '';
       document.getElementById('formModalTitle').textContent = 'Add New Conference / Expo';
       document.getElementById('formModalSubtitle').textContent = 'Configure logistics, featured initiatives, products & metadata';
-      document.getElementById('eventFormStartDate').value = '2027-04-14';
+      document.getElementById('eventFormStartDate').value = '2026-10-14';
       document.getElementById('eventFormImage').value = 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80';
       
       syncFormPresetButtons();
@@ -1917,10 +2398,28 @@
       }
     }
 
+    // Category / Initiative / Product setters
+    function setCategoryFilter(cat) {
+      currentCategory = cat;
+      renderFilters();
+      render();
+    }
+
+    function setInitiativeFilter(init) {
+      currentInitiativeFilter = init;
+      renderFilters();
+      render();
+    }
+
+    function setProductFilter(prod) {
+      currentProductFilter = prod;
+      renderFilters();
+      render();
+    }
+
     // Search & Sort Handlers
     function handleSearch(val) {
       searchQuery = val.trim();
-      renderFilters();
       render();
     }
 
@@ -1934,7 +2433,15 @@
       currentCategory = 'all';
       currentInitiativeFilter = 'all';
       currentProductFilter = 'all';
+      currentPeriodFilter = 'all';
+      currentTimelineFilter = 'all';
+      customStartDate = '';
+      customEndDate = '';
       document.getElementById('searchInput').value = '';
+      document.getElementById('periodFilterSelect').value = 'all';
+      document.getElementById('intervalStartDate').value = '';
+      document.getElementById('intervalEndDate').value = '';
+      setTimelineFilter('all');
       renderFilters();
       render();
     }
@@ -1978,14 +2485,17 @@
     window.addEventListener('click', (e) => {
       const detailModal = document.getElementById('eventModal');
       const formModal = document.getElementById('eventFormModal');
+      const fiscalModal = document.getElementById('fiscalSettingsModal');
       if (e.target === detailModal) closeModal();
       if (e.target === formModal) closeFormModal();
+      if (e.target === fiscalModal) closeFiscalSettingsModal();
     });
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal();
         closeFormModal();
+        closeFiscalSettingsModal();
       }
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
