@@ -137,10 +137,70 @@ In our initial PoC, multiple stacked horizontal rows (Categories, Initiatives, P
 #### Treasury & End-of-Quarter Budget Sweep:
 $$\text{Readiness Score} = \text{Vendor Setup (Active)} + \text{Quote Attached} + \text{Payment Method Selected}$$
 Events flagged as `Quick_Pull_Ready = true` can be executed within 48 hours to capture end-of-quarter budget surpluses.
+---
+
+### 1.6 Intake Governance, Multi-Stage Approvals & Screen Separation Architecture
+
+#### Separation of Concerns: Approved Portfolio vs. Intake Pipeline
+To ensure operational hygiene and avoid confusing confirmed corporate commitments with tentative event requests, NexusEXPO establishes strict architectural and visual separation between two core operating environments:
+1. **Approved Portfolio Hub (`#screenApproved`)**: The single source of truth for active event execution, booth construction, equipment staging, staff scheduling, and confirmed vendor invoices.
+2. **Intake & Approvals Pipeline (`#screenIntake`)**: A dedicated self-service hub where Field Sales (50–100 reps), Product Managers, and IST leads can propose events, track proposal progression, and review executive feedback without cluttering active event operations.
+
+#### Governance State Machine:
+```
+[ Field Sales / PM Submission ]
+               |
+               v
+       [ 1. PM Review ]   <--- Evaluates strategic product fit & initiative alignment
+               |
+               v
+    [ 2. Marketing Ops ]  <--- Validates booth presence, regional calendar, & logistics
+               |
+               v
+    [ 3. Finance Signoff ] <--- Audits budget envelope, ROI estimate, & cost center
+               |
+         +-----+-----+
+         |           |
+         v           v
+    [ Approved ] [ Declined ]
+         |
+         v (One-Click "Approve & Fund")
+[ Promoted to Approved Portfolio ]
+```
+
+#### Intake Proposal Data Contract:
+- **Requester Identity**: Submitter name, division (`Sales - Americas`, `Product Management - Cloud/AI`, `IST`), contact email.
+- **Strategic Alignment**: Primary Initiative, Target Products, Audience Scale, Justification statement.
+- **Financial & Commercial Projections**: Requested Budget ($), Projected Sales Pipeline ($), Sponsorship Tier.
+- **Workflow State**: `PM Review`, `Marketing Ops`, `Awaiting Finance`, `Approved`, `Declined`.
+- **Promotion Mechanics**: Upon final authorization, an event is automatically instantiated into the live `conferences` registry with status set to `Registration Open`, assigned fiscal attributes, and immediate visibility in the portfolio view.
+
+---
+
+### 1.7 Year-over-Year (YoY) Portfolio Dynamics & Budget Reconciliation Architecture
+
+#### The Portfolio Churn Problem
+Enterprise marketing teams face significant scrutiny during annual planning: executives need to understand not just what will be spent, but specifically:
+1. Which new events are being added to the corporate portfolio and why?
+2. Which historical events are being discontinued, how much budget is being released, and what was the rationale?
+3. What is the net budget impact (expansion vs. contraction) after accounting for recurring show cost variances?
+
+#### Mathematical Reconciliation & Budget Waterfall Model:
+$$\text{Target Spend} = \text{Baseline Spend} - \text{Dropped Event Savings} + \text{New Event Additions} \pm \text{Retained Event Variances}$$
+
+Where:
+- **Baseline Spend ($B$)**: Total audited expenditure in the reference fiscal year (e.g. FY25: $1,675,000 across 10 events).
+- **Dropped Event Savings ($S_{\text{drop}}$)**: Direct budget freed up by sunsetting events with low lead velocity or obsolete focus (e.g. Interop Tokyo -$180k, RSA Conference -$160k, CeBIT -$90k = -$430,000 released).
+- **New Event Additions ($A_{\text{new}}$)**: Capital deployed into high-growth market opportunities (e.g. AI Hardware Summit +$95k, GITEX Global +$240k, SpaceTech Expo +$195k, CloudScale Expo +$160k = +$690,000 allocated).
+- **Retained Event Variance ($\Delta R$)**: Cost modifications to recurring flagship events (e.g. booth expansion at MWC +$30k, streamlined presence at NextGen Auto -$20k, Black Hat +$10k, Global AI +$10k = +$30,000 net change).
+- **Target Spend ($T$)**: Final planned spend for the target fiscal year (e.g. FY26: $1,965,000). Net Variance: +$290,000 (+17.3% expansion).
+
+NexusEXPO renders this via an interactive **4-Pillar Visual Waterfall Bridge** and categorized tabular ledger enabling drill-down across `All Dynamics`, `New Additions`, `Dropped Shows`, and `Retained Core`.
 
 ---
 
 ## Section 2: Features, Microtasks & Implementation Checklist
+
 
 ### Feature 1: Executive Dashboard & Modern Viewport Architecture
 - [x] Responsive dark-mode dashboard with branding, search, and user profile <!-- Implemented in index.html:L116-L175 -->
@@ -213,3 +273,22 @@ Events flagged as `Quick_Pull_Ready = true` can be executed within 48 hours to c
 - [ ] *[Production]* Payment pipeline tracking: `Vendor Setup Active` vs `Vendor Setup Required`, PO vs. Corporate Credit Card
 - [ ] *[Production]* Standardized `Campaign_ID` generation (e.g., `NT_2026_FQ4_RSA_SanFrancisco_March_2026`) formatted for Salesforce export
 - [ ] *[Production]* Oracle Procurement Cloud integration: PO synchronization and invoice payment confirmation
+
+### Feature 11: Dedicated Event Intake & Multi-Stage Approvals Pipeline
+- [x] Dedicated Top-Level Navigation Switcher for Approved Portfolio vs. Intake & Approvals Hub vs. YoY Treasury Analyzer <!-- Implemented in index.html:L170-L195, L2043-L2088 -->
+- [x] Distinct Intake & Approvals Screen (`#screenIntake`) completely isolated from operational portfolio <!-- Implemented in index.html:L451-L580 -->
+- [x] Real-time Intake KPI Counters (Total Proposals, Pending Action, Funded, Proposed Spend) <!-- Implemented in index.html:L473-L491, L2890-L2910 -->
+- [x] Dedicated Intake Proposal Submission Modal capturing requester name, division (Sales, PM, IST), estimated spend, pipeline target, and rationale <!-- Implemented in index.html:L1129-L1240, L3047-L3100 -->
+- [x] Multi-stage governance filter pills (All Requests, Under Review, PM Review, Marketing Ops, Awaiting Finance, Approved) <!-- Implemented in index.html:L495-L516, L2885-L2920 -->
+- [x] Dual presentation mode for proposals: Rich responsive card layout and dense governance table <!-- Implemented in index.html:L525-L578, L2920-L2985 -->
+- [x] One-click "Approve & Fund" execution that promotes pending intake items directly into the approved portfolio with toast notification <!-- Implemented in index.html:L2925-L2935, L2991-L3045 -->
+- [ ] *[Production]* Role-based view filtering allowing Field Sales submitters to view only their own submitted requests
+
+### Feature 12: Year-over-Year (YoY) Portfolio Dynamics & Budget Churn Analyzer
+- [x] Dedicated YoY Analyzer Screen (`#screenYoY`) with multi-year comparison selector (FY25 Baseline vs. FY26 Target) <!-- Implemented in index.html:L582-L625, L3134-L3170 -->
+- [x] 4 Executive KPI Cards tracking Baseline Spend, Dropped Savings, New Event Spend, and Net Target Variance <!-- Implemented in index.html:L625-L665, L3170-L3210 -->
+- [x] Interactive 4-Pillar Budget Reconciliation Waterfall Bridge visualizing baseline-to-target net walk <!-- Implemented in index.html:L668-L705, L3212-L3245 -->
+- [x] Filterable Portfolio Dynamics Ledger with categorical tabs (All Dynamics, New Additions, Dropped Shows, Retained Core) <!-- Implemented in index.html:L710-L778, L3250-L3320 -->
+- [x] Discontinuation Rationale & Net Savings tracking for dropped events (e.g. Interop Tokyo, RSA Conf, CeBIT) <!-- Implemented in index.html:L1943-L2000, L3280-L3320 -->
+- [x] Real-time mathematical reconciliation verifying $\text{Target} = \text{Baseline} - \text{Dropped} + \text{New} \pm \text{Retained}$ <!-- Implemented in index.html:L3140-L3245 -->
+- [ ] *[Production]* Exportable CFO Executive Summary Brief (PDF/Excel) summarizing YoY budget shifts and ROI rationale

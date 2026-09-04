@@ -33,10 +33,25 @@ Instead of stacking multiple horizontal rows of dropdowns and pill buttons on th
    - *Staffing & Governance*: Event Lead, Supporting Staff, Approval Status, Priority Tier.
    - *Treasury & Readiness*: Payment Status, Vendor Onboarding, Quick-Pull Ready toggle.
 3. **Floating Active Chips Strip**: Clean tags beneath the search bar with 1-click dismissal and global clear.
+### 1.5 Intake Governance, Multi-Stage Approvals & Screen Separation Architecture
+To ensure operational clarity, NexusEXPO architecturally isolates approved commitments from proposed event sponsorships:
+- **Approved Portfolio Hub (`#screenApproved`)**: Active execution hub for 13+ confirmed events, logistics, staff rosters, and financial tracking.
+- **Intake & Approvals Pipeline (`#screenIntake`)**: Dedicated self-service portal for Field Sales reps (50–100 users) and PMs to submit sponsorship requests and track review status across `PM Review` -> `Marketing Ops` -> `Awaiting Finance` -> `Approved`.
+- **One-Click Promotion**: Approved proposals instantly transition into the live `conferences` portfolio with `Registration Open` status.
+
+### 1.6 Year-over-Year (YoY) Portfolio Dynamics & Budget Reconciliation
+A mathematical treasury model reconciling target budget vs. historical baseline:
+$$\text{Target Spend} = \text{Baseline Spend} - \text{Dropped Savings} + \text{New Event Spend} \pm \text{Retained Variances}$$
+- FY25 Baseline: $1,675,000 (10 events: 7 continuing + 3 discontinued).
+- Dropped Show Savings: -$430,000 released from retired shows (Interop Tokyo -$180k, RSA Conf -$160k, CeBIT -$90k).
+- New Event Investments: +$690,000 allocated to high-growth strategic venues (AI Hardware Summit +$95k, GITEX Global +$240k, SpaceTech Expo +$195k, CloudScale Expo +$160k).
+- Retained Core Show Variances: +$30,000 net variance across continuing flagship expos.
+- FY26 Target Spend: $1,965,000 (+17.3% net expansion, balanced to the dollar).
 
 ---
 
 ## Section 2: Features, Microtasks & Implementation Checklist
+
 
 ### Feature 1: Core Dashboard Shell & Layout
 - [x] Responsive dark-mode dashboard with branding, search bar, and user profile <!-- Implemented in index.html:L116-L175 -->
@@ -109,3 +124,22 @@ Instead of stacking multiple horizontal rows of dropdowns and pill buttons on th
 - [ ] *[Production]* Payment pipeline tracking: `Vendor Setup Active` vs `Vendor Setup Required`, PO vs. Corporate Credit Card
 - [ ] *[Production]* Standardized `Campaign_ID` generation (e.g., `NT_2026_FQ4_RSA_SanFrancisco_March_2026`) formatted for Salesforce export
 - [ ] *[Production]* Oracle Procurement Cloud integration: PO synchronization and invoice payment confirmation
+
+### Feature 11: Dedicated Event Intake & Multi-Stage Approvals Pipeline
+- [x] Dedicated Top-Level Navigation Switcher for Approved Portfolio vs. Intake & Approvals Hub vs. YoY Treasury Analyzer <!-- Implemented in index.html:L170-L195, L2043-L2088 -->
+- [x] Distinct Intake & Approvals Screen (`#screenIntake`) completely isolated from operational portfolio <!-- Implemented in index.html:L451-L580 -->
+- [x] Real-time Intake KPI Counters (Total Proposals, Pending Action, Funded, Proposed Spend) <!-- Implemented in index.html:L473-L491, L2890-L2910 -->
+- [x] Dedicated Intake Proposal Submission Modal capturing requester name, division (Sales, PM, IST), estimated spend, pipeline target, and rationale <!-- Implemented in index.html:L1129-L1240, L3047-L3100 -->
+- [x] Multi-stage governance filter pills (All Requests, Under Review, PM Review, Marketing Ops, Awaiting Finance, Approved) <!-- Implemented in index.html:L495-L516, L2885-L2920 -->
+- [x] Dual presentation mode for proposals: Rich responsive card layout and dense governance table <!-- Implemented in index.html:L525-L578, L2920-L2985 -->
+- [x] One-click "Approve & Fund" execution that promotes pending intake items directly into the approved portfolio with toast notification <!-- Implemented in index.html:L2925-L2935, L2991-L3045 -->
+- [ ] *[Production]* Role-based view filtering allowing Field Sales submitters to view only their own submitted requests
+
+### Feature 12: Year-over-Year (YoY) Portfolio Dynamics & Budget Churn Analyzer
+- [x] Dedicated YoY Analyzer Screen (`#screenYoY`) with multi-year comparison selector (FY25 Baseline vs. FY26 Target) <!-- Implemented in index.html:L582-L625, L3134-L3170 -->
+- [x] 4 Executive KPI Cards tracking Baseline Spend, Dropped Savings, New Event Spend, and Net Target Variance <!-- Implemented in index.html:L625-L665, L3170-L3210 -->
+- [x] Interactive 4-Pillar Budget Reconciliation Waterfall Bridge visualizing baseline-to-target net walk <!-- Implemented in index.html:L668-L705, L3212-L3245 -->
+- [x] Filterable Portfolio Dynamics Ledger with categorical tabs (All Dynamics, New Additions, Dropped Shows, Retained Core) <!-- Implemented in index.html:L710-L778, L3250-L3320 -->
+- [x] Discontinuation Rationale & Net Savings tracking for dropped events (e.g. Interop Tokyo, RSA Conf, CeBIT) <!-- Implemented in index.html:L1943-L2000, L3280-L3320 -->
+- [x] Real-time mathematical reconciliation verifying $\text{Target} = \text{Baseline} - \text{Dropped} + \text{New} \pm \text{Retained}$ <!-- Implemented in index.html:L3140-L3245 -->
+- [ ] *[Production]* Exportable CFO Executive Summary Brief (PDF/Excel) summarizing YoY budget shifts and ROI rationale
